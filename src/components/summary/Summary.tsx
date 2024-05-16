@@ -25,6 +25,7 @@ import { editSummarySchema } from "@/schemas";
 import { updateSummary } from "@/actions/summary";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Summary({
     summaryData,
@@ -33,6 +34,7 @@ export default function Summary({
     summaryData: string;
     contractID: string;
 }) {
+    const router = useRouter()
     const [summary, setSummary] = useState(summaryData);
     const toast = useToast();
     const { data: session } = useSession();
@@ -126,7 +128,7 @@ export default function Summary({
                     size="sm"
                     icon={<EditIcon />}
                     aria-label={"Edit summary"}
-                    onClick={onOpenModal}
+                    onClick={() => router.push(`/en/dashboard/contracts/editor?id=${contractID}`)}
                     bg="white"
                 />
             </header>

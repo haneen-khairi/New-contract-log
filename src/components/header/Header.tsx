@@ -21,8 +21,8 @@ import Link from "next/link"; // Import Link from next/link
 import { CgMenuLeftAlt } from "react-icons/cg";
 
 const navItems = [
-  { text: "Home", href: "#" },
-  { text: "Pricing", href: "#" },
+  { text: "Home", href: "en/" },
+  { text: "Pricing", href: "en/pricing" },
   { text: "Blog", href: "#" },
   { text: "Contact Us", href: "#" },
 ];

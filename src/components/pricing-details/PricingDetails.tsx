@@ -1,5 +1,7 @@
 "use client";
 
+import { CustomAxios } from "@/utils/CustomAxios";
+import { Feature, Plan } from "@/views/pricing";
 import {
     Box,
     Button,
@@ -15,6 +17,9 @@ import {
     ListIcon,
     Text,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { MdCheckCircleOutline } from "react-icons/md";
 
 interface PricingDetailsProps {
@@ -28,25 +33,71 @@ interface PricingDetailsProps {
     buttonText: string;
 }
 
-export default function PricingDetails(props: PricingDetailsProps) {
-    const features = [
-        props.feature1,
-        props.feature2,
-        props.feature3,
-        props.feature4,
-    ];
-
-    const featuresList = features.map((feature, index) => {
+export default function PricingDetails({
+    plan,
+    onGetCheckoutId = (checkoutId: string) => {}
+}: {
+    plan: Plan,
+    onGetCheckoutId: (checkoutId: string) => void
+}) {
+    const router = useRouter()
+    // const features = [
+    //     props.feature1,
+    //     props.feature2,
+    //     props.feature3,
+    //     props.feature4,
+    // ];
+    const {data: session} = useSession()
+    // async function payment(paymentId: string){
+    //     const response = await CustomAxios(`post`, `https://eu-test.oppwa.com/v1/checkouts`,  {
+    //         // 'Authorization': `Bearer ${session?.tokens?.access || ""}`
+    //     } , {
+    //         'entityId': paymentId,
+    //         'amount':plan.price,
+    //         'currency':'SAR',
+    //         'paymentType': 'DB'
+    //         // token: session?.tokens?.access
+    //     })
+       
+    //     console.log("response response money", response)
+    // }
+    async function subscribeToPlan(planId: any){
+        // if(session?.tokens?.access === undefined) {
+        //     return router.push('/en/login')
+        // }
+        const response = await CustomAxios(`post`, `${process.env.NEXT_PUBLIC_API_KEY}subscription/subscribe`,  {
+            // 'Authorization': `Bearer ${session?.tokens?.access || ""}`
+        } , {
+            plan_id: planId,
+            // token: session?.tokens?.access
+        })
+        if(response){
+            // window.open(process.env.NEXT_PUBLIC_PAYMENT_API, '*')
+            onGetCheckoutId(response?.payment_token)
+        }
+        console.log("subscribeToPlan response", response)
+    }
+    useEffect(() => {
+        if (!session?.tokens?.access) {
+            router.push('/en/login')
+            console.log("session", session?.tokens?.access)
+        }
+      return () => {
+        
+      }
+    }, [session?.tokens?.access])
+    
+    const featuresList = plan.features.map((feature: Feature, index) => {
         return (
             <ListItem
                 key={index}
-                color={props.tierName === "SME Tier" ? "white" : ""}
+                // color={props.tierName === "SME Tier" ? "white" : ""}
             >
                 <ListIcon
                     as={MdCheckCircleOutline}
-                    color={props.tierName === "SME Tier" ? "white" : "blue.300"}
+                    color={"blue.300"}
                 />
-                {feature}
+                {feature.name}
             </ListItem>
         );
     });
@@ -60,28 +111,30 @@ export default function PricingDetails(props: PricingDetailsProps) {
                 borderRadius: "8px",
                 padding: "24px 24px 24px",
             }}
-            backgroundColor={props.tierName === "SME Tier" ? "#287AE0" : ""}
+            // backgroundColor={props.tierName === "SME Tier" ? "#287AE0" : ""}
         >
-            <CardHeader color={props.tierName === "SME Tier" ? "white" : ""}>
+            <CardHeader 
+            // color={props.tierName === "SME Tier" ? "white" : ""}
+            >
                 <Flex gap="4">
                     <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
                         <Box>
                             <Heading fontSize={"28px"}>
-                                {props.tierName}
+                                {plan.name}
                             </Heading>
                             <Heading fontSize={"28px"} paddingTop={"16px"}>
-                                {props.price} <sup>/ Year</sup>
+                                {plan.price} <sup>/ Year</sup>
                             </Heading>
                             <Text
                                 fontSize={"18px"}
                                 paddingTop={"16px"}
-                                color={
-                                    props.tierName === "SME Tier"
-                                        ? "white"
-                                        : "#667085"
-                                }
+                                // color={
+                                //     props.tierName === "SME Tier"
+                                //         ? "white"
+                                //         : "#667085"
+                                // }
                             >
-                                {props.shortDescription}
+                                {plan.description}
                             </Text>
                         </Box>
                     </Flex>
@@ -89,7 +142,7 @@ export default function PricingDetails(props: PricingDetailsProps) {
             </CardHeader>
             <Divider
                 margin={"auto"}
-                color={props.tierName === "SME Tier" ? "white" : "#D9D9D9"}
+                color={"#D9D9D9"}
             />
             <CardBody>
                 <Text>
@@ -112,15 +165,17 @@ export default function PricingDetails(props: PricingDetailsProps) {
                     height={54}
                     color="#287AE0"
                     variant="outline"
-                    backgroundColor={
-                        props.tierName === "SME Tier" ? "white" : ""
-                    }
+                    onClick={() => subscribeToPlan(plan.id)}
+                    // backgroundColor={
+                    //     props.tierName === "SME Tier" ? "white" : ""
+                    // }
                     border={"1px solid #287AE0"}
                     borderRadius={"4px"}
                 >
-                    {props.buttonText}
+                    {plan.price === "0.00" ? "Try for free" : "Subscribe Now"}
                 </Button>
             </CardFooter>
         </Card>
+
     );
 }

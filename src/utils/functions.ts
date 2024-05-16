@@ -38,3 +38,21 @@ export const handleEditPermissionResponse = (
     clear();
   }
 };
+
+export function isoToTimeAMPM(isoString: string) {
+  // Create a Date object from the ISO string
+  const date = new Date(isoString);
+
+  // Extract hours (0-23) and minutes (0-59)
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+
+  // Use modulo (%) to get hour in 12-hour format (1-12)
+  const hour12 = hours % 12 || 12;
+
+  // Use conditional statement for AM/PM
+  const amPm = hours < 12 ? "AM" : "PM";
+
+  // Return formatted time string
+  return `${hour12}:${minutes} ${amPm}`;
+}
