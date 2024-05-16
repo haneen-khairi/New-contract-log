@@ -1,19 +1,42 @@
 "use client";
 
-import { Box, Flex, IconButton, VStack, Image } from "@chakra-ui/react";
+import { Box, Flex, IconButton, VStack, Image, Progress, Card, CardBody, Button } from "@chakra-ui/react";
 import { RiMenuFoldLine, RiMenuUnfoldLine } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import NavigationLink from "../common/NavigationLink";
 import AccordionNavigationLink from "../common/ContractsNavigationLink";
-
+import { useSession } from 'next-auth/react'
+import { CustomAxios } from "@/utils/CustomAxios";
+import Link from 'next/link'
 const MotionBox = motion(Box);
-
+type SubscriptionInfo = {
+    number_of_uploaded: number | undefined,
+    upload_limit: number
+}
 export default function Sidebar() {
+    const { data: session } = useSession();
+    const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo>()
     const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
     const toggleCollapse = () => {
         setIsCollapsed(!isCollapsed);
     };
+    async function subscriptionInfoApi() {
+        const response = await CustomAxios('get', `${process.env.NEXT_PUBLIC_API_KEY}subscription/info`, {
+            'Authorization': `Bearer ${session?.tokens?.access || ""}`
+        })
+        setSubscriptionInfo(response.contract)
+        console.log("subscriptionInfo response", response)
+    }
+    useEffect(() => {
+        if (session?.tokens?.access) {
+            subscriptionInfoApi()
+        }
+
+        return () => {
+
+        }
+    }, [session?.tokens?.access])
 
     return (
         <MotionBox
@@ -112,6 +135,25 @@ export default function Sidebar() {
                         link={"billing"}
                     />
                 </VStack>
+                <div className="progress mb-8px">
+                    <Flex marginBottom={'8px'} justifyContent={'space-between'}>
+                        <p>Free trial</p>
+                        <h3>{subscriptionInfo?.number_of_uploaded} Contracts Left</h3>
+                    </Flex>
+                    <Progress colorScheme={'orange'} borderRadius={'md'} size='sm' value={((subscriptionInfo?.number_of_uploaded || 0) / (subscriptionInfo?.upload_limit || 1)) * 100} />
+                </div>
+                <Card maxW='sm' className="card">
+                    <CardBody className="card__premium">
+                        <Image
+                            src='/icons/premiumIcon.svg'
+                            alt='Green double couch with wooden legs'
+                            borderRadius='lg'
+                            marginBottom={'12px'}
+                        />
+                        <p>Upgrade to <span>Pro</span> for more resources</p>
+                        <Button as={Link} href={'/en/pricing'}   marginTop={'12px'} backgroundColor={'white'} >Upgrade </Button>
+                    </CardBody>
+                </Card>
             </Flex>
         </MotionBox>
     );
