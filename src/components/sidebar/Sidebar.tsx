@@ -122,7 +122,7 @@ export default function Sidebar() {
                     <NavigationLink
                         icon={"/icons/sidebar-help.svg"}
                         text="Help & Support"
-                        link={"help"}
+                        link={"/en/dashboard/help"}
                     />
                     <NavigationLink
                         icon={"/icons/sidebar-user.svg"}
