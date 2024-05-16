@@ -46,7 +46,7 @@ export default function Page() {
             >
                 <Flex alignItems={'center'} justifyContent={'space-between'} mb={'24px'}>
 
-                    All Contracts
+                    All Tickets
                     <Button variant={'prime'} onClick={onOpenModal} color={'#fff'} width={'226px'}>New Ticket</Button>
                 </Flex>
                 <Flex justifyContent={'space-between'}>
