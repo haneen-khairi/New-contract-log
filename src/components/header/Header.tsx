@@ -23,7 +23,7 @@ import { CgMenuLeftAlt } from "react-icons/cg";
 const navItems = [
   { text: "Home", href: "en/" },
   { text: "Pricing", href: "en/pricing" },
-  { text: "Blog", href: "#" },
+  { text: "Blog", href: "en/blogs" },
   { text: "Contact Us", href: "en/contact_us" },
 ];
 

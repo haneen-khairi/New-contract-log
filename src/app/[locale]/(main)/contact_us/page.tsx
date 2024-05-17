@@ -1,6 +1,7 @@
 
 "use client"
 import { Button, FormControl, Grid, Input, Textarea } from '@chakra-ui/react'
+import Image from 'next/image';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 
@@ -70,7 +71,7 @@ export default function Page() {
                     <Button variant={'prime'} type='submit' size={''}>Send</Button>
                 </form>
             </div>
-            <div className="" style={{ height: '700px' }}></div>
+            <Image src={'/images/contact_us_image.webp'} className='w-full contact__form--image' width={250} height={700} alt='contact us image' />
         </Grid>
     </section>
 }

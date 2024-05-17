@@ -1,3 +1,4 @@
 type IBlogCardProps = {
-    blog: any
+    blog?: any,
+    reverse?: boolean
 }

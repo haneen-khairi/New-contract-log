@@ -18,7 +18,9 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-
+.w-full{
+  width: 100%;
+}
 .slick-dots {
   width: unset !important;
   li button:before {
@@ -73,6 +75,9 @@ body {
       line-height: 28px;
       text-align: left;
       margin-bottom: 40px;
+    }
+    &--image{
+      object-fit: cover;
     }
   }
 }
@@ -390,8 +395,21 @@ body {
 
 }
 .blogs{
+  &__section{
+    padding: 46px 80px;
+  }
+  &__header{
+    //styleName: Display xs/Semibold;
+    font-family: Inter;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    text-align: start;
+    color: #1A1A1A;
+    margin-bottom: 32px;
+  }
   &__card{
-    min-height: 468px;
+    // min-height: 468px;
     &--header{
       //styleName: Text lg/Semibold;
       font-family: Inter;
@@ -428,6 +446,9 @@ body {
     }
     &--image{
       margin-bottom: 32px;
+      width: 100% !important;
+      object-fit: cover;
+      height: 240px;
     }
 
   }
