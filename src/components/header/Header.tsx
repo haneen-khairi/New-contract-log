@@ -24,7 +24,7 @@ const navItems = [
   { text: "Home", href: "en/" },
   { text: "Pricing", href: "en/pricing" },
   { text: "Blog", href: "#" },
-  { text: "Contact Us", href: "#" },
+  { text: "Contact Us", href: "en/contact_us" },
 ];
 
 export default function Header() {
