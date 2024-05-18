@@ -395,6 +395,9 @@ body {
 
 }
 .blogs{
+  &__page{
+    padding: 57px 58px 103px 57px;
+  }
   &__section{
     padding: 46px 80px;
   }
@@ -449,7 +452,39 @@ body {
       width: 100% !important;
       object-fit: cover;
       height: 240px;
+      &-page{
+        width: 100% !important;
+        object-fit: cover;
+        height: 633px;
+      }
     }
 
+  }
+  &__details{
+    &--time{
+      //styleName: Text sm/Semibold;
+      font-family: Inter;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      text-align: start;
+      color: #287AE0;
+      margin-bottom: 32px;
+      display: block;
+    }
+    &--header{
+      font-family: Inter;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 46.8px;
+      text-align: start;
+      color: #131116;
+      margin-bottom: 38px;
+    }
+    &--image{
+      width: 100% !important;
+      object-fit: cover;
+      height: 633px;
+    }
   }
 }
