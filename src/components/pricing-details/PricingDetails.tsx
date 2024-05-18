@@ -79,7 +79,7 @@ export default function PricingDetails({
     }
     useEffect(() => {
         if (!session?.tokens?.access) {
-            router.push('/en/login')
+            // router.push('/en/login')
             console.log("session", session?.tokens?.access)
         }
       return () => {
@@ -165,7 +165,13 @@ export default function PricingDetails({
                     height={54}
                     color="#287AE0"
                     variant="outline"
-                    onClick={() => subscribeToPlan(plan.id)}
+                    onClick={() =>{
+                        if(session?.tokens?.access){
+                            subscribeToPlan(plan.id)
+                        }else{
+                            router.push(`/en/login`)
+                        }
+                    }}
                     // backgroundColor={
                     //     props.tierName === "SME Tier" ? "white" : ""
                     // }
