@@ -117,6 +117,26 @@ export default function AccordionNavigationLink({
                             Repository
                         </Text>
                     </Link>
+                    <Link
+                        style={{
+                            display: "block",
+                            color: repoPage ? "white" : "black",
+                            backgroundColor: repoPage ? "#EE7C21" : "white",
+                            padding: "8px",
+                            textAlign: "center",
+                            marginTop: "12px",
+                            borderRadius: "8px",
+                        }}
+                        href={"/en/dashboard/contracts/templates"}
+                    >
+                        <Text
+                            whiteSpace={"pre"}
+                            fontSize="16px"
+                            fontWeight={"500"}
+                        >
+                            Templates
+                        </Text>
+                    </Link>
                 </AccordionPanel>
             </AccordionItem>
         </Accordion>
