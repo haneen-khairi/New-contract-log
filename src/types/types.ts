@@ -130,7 +130,7 @@ export interface InvoiceItem {
     description: string;
     id: string;
     name: string;
-    price: string;
+    price: string | any;
     quantity: number;
 }
 
