@@ -569,3 +569,28 @@ body {
     }
   }
 }
+.clauses{
+  position: fixed;
+  top: 123px;
+  bottom: 0;
+  right: 0;
+  height: calc(100vh - 123px);
+  overflow: auto;
+  width: 300px;
+  background-color: #fff;
+  padding: 24px;
+  &__header{
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 18px;
+    text-align: start;
+    color: #101828;
+    margin-bottom: 16px;
+  }
+  &__card{
+    &--paragraph{
+      margin-bottom: 16px;
+    }
+  }
+}

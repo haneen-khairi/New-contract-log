@@ -4,6 +4,9 @@ import CKeditor from "@/components/CKeditor";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import { Divider, Flex } from "@chakra-ui/react";
+import ClausesItem from "@/components/clauses/ClausesItem";
+import { CustomAxios } from "@/utils/CustomAxios";
 type ContractDocument = {
   id: string;
   file: string;
@@ -17,6 +20,7 @@ export default function Page() {
   const [data, setData] = useState("");
   const query = useSearchParams()
   const { data: session } = useSession();
+  const [clauses, setClauses] = useState([])
   const [document, setDocuments] = useState<ContractDocument>({
     id: "",
     file: "",
@@ -26,6 +30,12 @@ export default function Page() {
     html_content: ""
 });
   const id = query.get("id") as any;
+  async function getClauses(){
+    const response = await CustomAxios(`get`, `${process.env.NEXT_PUBLIC_API_KEY}contract/edit/clauses`, {
+      'Authorization': `Bearer ${session?.tokens?.access}`
+    })
+    console.log("reposne", response)
+  }
   useEffect(() => {
     setEditorLoaded(true);
     const fetchFile = async () => {
@@ -42,9 +52,11 @@ export default function Page() {
               console.error("Error fetching file data:", error);
           }
       };
-
+      if(session?.tokens?.access){
+        getClauses()
+      }
       fetchFile();
-  }, [id]);
+  }, [id, session?.tokens?.access]);
   return (
     <div className="ckeditor-container">
       <CKeditor
@@ -55,6 +67,15 @@ export default function Page() {
         value={document.html_content || ""}
         editorLoaded={editorLoaded}
       />
+      <div className="clauses">
+        <h3 className="clauses__header">Clauses List</h3>
+        <Divider color={'#000000'} mb={'16px'} />
+        <Flex direction="column" gap="16px">
+        <ClausesItem
+        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis nisl cursus bibendum sit nulla accumsan sodales ornare. At urna viverra non suspendisse neque, lorem. Pretium condimentum pellentesque gravida id etiam sit sed arcu euismod. Rhoncus proin orci duis scelerisque molestie cursus tincidunt aliquam." 
+         id={12} onHandleClick={() => console.log("==== clkicked on add contract ===")} />
+        </Flex>
+      </div>
     </div>
   );
 }
