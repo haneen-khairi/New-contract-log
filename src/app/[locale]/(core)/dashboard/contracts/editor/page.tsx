@@ -34,6 +34,7 @@ export default function Page() {
     const response = await CustomAxios(`get`, `${process.env.NEXT_PUBLIC_API_KEY}contract/edit/clauses`, {
       'Authorization': `Bearer ${session?.tokens?.access}`
     })
+    setClauses(response.data)
     console.log("reposne", response)
   }
   useEffect(() => {
@@ -71,9 +72,10 @@ export default function Page() {
         <h3 className="clauses__header">Clauses List</h3>
         <Divider color={'#000000'} mb={'16px'} />
         <Flex direction="column" gap="16px">
-        <ClausesItem
-        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis lobortis nisl cursus bibendum sit nulla accumsan sodales ornare. At urna viverra non suspendisse neque, lorem. Pretium condimentum pellentesque gravida id etiam sit sed arcu euismod. Rhoncus proin orci duis scelerisque molestie cursus tincidunt aliquam." 
-         id={12} onHandleClick={() => console.log("==== clkicked on add contract ===")} />
+        {clauses?.length > 0 && clauses.map((clause: any) => <ClausesItem
+        key={clause.id}
+        content={clause.content}
+         id={clause.id} onHandleClick={() => console.log("==== clkicked on add contract ===", clause.id)} />)}
         </Flex>
       </div>
     </div>
