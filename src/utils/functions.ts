@@ -56,3 +56,11 @@ export function isoToTimeAMPM(isoString: string) {
   // Return formatted time string
   return `${hour12}:${minutes} ${amPm}`;
 }
+export function dateConverter(timestamp:string){
+  const formattedDate = new Date(timestamp).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+  return formattedDate
+}

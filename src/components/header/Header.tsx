@@ -21,10 +21,10 @@ import Link from "next/link"; // Import Link from next/link
 import { CgMenuLeftAlt } from "react-icons/cg";
 
 const navItems = [
-  { text: "Home", href: "en/" },
-  { text: "Pricing", href: "en/pricing" },
-  { text: "Blog", href: "en/blogs" },
-  { text: "Contact Us", href: "en/contact_us" },
+  { text: "Home", href: "/en/" },
+  { text: "Pricing", href: "/en/pricing" },
+  { text: "Blog", href: "/en/blogs" },
+  { text: "Contact Us", href: "/en/contact_us" },
 ];
 
 export default function Header() {
@@ -76,7 +76,7 @@ export default function Header() {
           alt="brand-logo"
           display={{ md: "none", base: "flex" }}
         />
-        <Button as={Link} href={"en/login"} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Sign In</Button>
+        <Button as={Link} href={"/en/login"} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Sign In</Button>
       </Flex>
 
       <Drawer isOpen={isOpen} onClose={onClose} placement="left" size="sm">
@@ -96,7 +96,7 @@ export default function Header() {
           </DrawerHeader>
           <DrawerBody>
             {navItems.map(renderNavItem)}
-            <Button as={Link} href={"en/login"} mt={'12px'} variant={'prime'} w={'100%'}>Sign In</Button>
+            <Button as={Link} href={"/en/login"} mt={'12px'} variant={'prime'} w={'100%'}>Sign In</Button>
           </DrawerBody>
         </DrawerContent>
       </Drawer>
