@@ -75,7 +75,12 @@ export default function Page() {
         {clauses?.length > 0 && clauses.map((clause: any) => <ClausesItem
         key={clause.id}
         content={clause.content}
-         id={clause.id} onHandleClick={() => console.log("==== clkicked on add contract ===", clause.id)} />)}
+         id={clause.id} 
+         onHandleClick={() => setDocuments((prevData) => ({
+          ...prevData, 
+          html_content: prevData.html_content + clause.content
+        }))} />
+         )}
         </Flex>
       </div>
     </div>

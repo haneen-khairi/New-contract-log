@@ -131,7 +131,6 @@ export default function Page() {
                 </ModalHeader>
                 <Divider orientation="horizontal" />
                 <TicketAddForm onClose={onCloseModal} onSuccess={() => getTickets()} />
-                {/* <ImportForm onClose={onCloseModal} /> */}
             </ModalContent>
         </Modal>
     </Box>

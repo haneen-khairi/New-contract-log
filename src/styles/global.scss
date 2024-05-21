@@ -594,3 +594,45 @@ body {
     }
   }
 }
+.select{
+  &__multiple{
+      [data-slot="trigger"]{
+          padding: 6px 12px;
+          min-height: 48px !important;
+          border: 1px solid var(--neutral-300);
+          background-color: var(--generic-white);
+          margin-bottom: 4px;
+          &:hover{
+              background-color: unset;
+          }
+
+      }
+      &--selected{
+          background-color: #ffffff !important;
+          border-radius: 30px !important;
+          border: 1px solid #E0E3E6;
+          padding: 2px;
+          gap: 4px;
+          margin: 2px auto;
+
+
+          &-label{
+              font-family: Inter;
+              font-size: 14px;
+              font-weight: 600;
+              line-height: 20px;
+              text-align: start;
+          }
+          &:hover{
+              svg{
+                  path {
+                      fill: var(--neutral-700);
+                  }
+                  rect {
+                      fill: var(--neutral-300);
+                  }
+              }
+          }
+      }
+  }
+}
