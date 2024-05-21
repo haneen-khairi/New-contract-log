@@ -167,7 +167,6 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
         <Divider orientation="horizontal" />
 
         <ModalFooter gap={"12px"}>
-            <Flex justifyContent={'space-between'}>
                 <Button fontWeight={"400"} variant={"outline"} bgColor={'#FFF4EB'} onClick={handleAddCustomTag}>
                     <Text color="#EE7C21" fontSize={'14px'} fontWeight={'500'}>+ New</Text>
                 </Button>
@@ -184,7 +183,6 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
                         Submit
                     </Button>
                 </div>
-            </Flex>
         </ModalFooter>
     </form>
 }
