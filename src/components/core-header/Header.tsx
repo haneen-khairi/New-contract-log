@@ -33,16 +33,25 @@ import NavigationLink from "../common/NavigationLink";
 import { FaChevronDown } from "react-icons/fa6";
 import { ImportForm } from "../import-form";
 import AccordionNavigationLink from "../common/ContractsNavigationLink";
+import ArrowIconContractImport from "../import-form/ArrowIconContractImport";
+import TagsForm from "../import-form/TagsForm";
+import { useState } from "react";
 
 export default function Header() {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedFileUrl, setSelectedFileUrl] = useState<string>("");
+
   const {
     isOpen: isOpenModal,
     onOpen: onOpenModal,
     onClose: onCloseModal,
   } = useDisclosure();
-
+  const {
+    isOpen: isCreateModalOpen,
+    onOpen: onOpenModalTags,
+    onClose: onCloseModalTags,
+  } = useDisclosure();
   return (
     <>
       <Flex
@@ -123,10 +132,41 @@ export default function Header() {
           </ModalHeader>
           <ModalCloseButton />
           <Divider orientation="horizontal" />
-          <ImportForm onClose={onCloseModal} />
+          <ImportForm onSuccess={(url) => {
+            console.log("=== url ====", url)
+            setTimeout(() => {
+              setSelectedFileUrl(url)
+            }, 200);
+            onOpenModalTags()
+          }} onClose={onCloseModal} />
         </ModalContent>
       </Modal>
-
+      <Modal onClose={onCloseModalTags} isOpen={isCreateModalOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent borderRadius={"16px"} w={"95%"} maxW={"520px"}>
+          <ModalHeader>
+            <Text fontSize={"18"} fontWeight={"700"}>
+              Import Contract
+            </Text>
+            <Text fontSize={"13"} fontWeight={"400"}>
+              Select a file to import to your repository
+            </Text>
+            <Flex gap={'8px'} alignItems={'center'}>
+              <Text fontSize={"14px"} fontWeight={"600"} color={'#287AE0'}>
+                Import
+              </Text>
+              <ArrowIconContractImport />
+              <Text fontSize={"14px"} fontWeight={"600"} color={'#287AE0'}>
+                Tags
+              </Text>
+            </Flex>
+          </ModalHeader>
+          <ModalCloseButton />
+          <Divider orientation="horizontal" />
+          
+          <TagsForm sessionKey={session?.tokens?.access || ""} keyAttachment={selectedFileUrl || ""} tags={[]} onClose={onCloseModalTags} />
+        </ModalContent>
+      </Modal>
       <Drawer isOpen={isOpen} onClose={onClose} placement="left" size="sm">
         <DrawerOverlay />
         <DrawerContent>

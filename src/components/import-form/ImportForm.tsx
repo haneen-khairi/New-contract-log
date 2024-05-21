@@ -12,26 +12,30 @@ import ArrowIconContractImport from './ArrowIconContractImport';
 
 interface ImportFormProps {
   onClose: () => void;
+  onSuccess: (url: string) => void;
 }
 
-export default function ImportForm({ onClose }: ImportFormProps) {
+export default function ImportForm({ onClose, onSuccess }: ImportFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: session } = useSession();
   const toast = useToast();
-  const {
-    isOpen: isCreateModalOpen,
-    onOpen: onOpenModalTags,
-    onClose: onCloseModalTags,
-  } = useDisclosure();
+
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     const formData = new FormData();
     formData.append("file", selectedFile!);
     formData.append("access", session?.tokens?.access || "");
-
+    const fileResponse = await CustomAxios(`post`,`${process.env.NEXT_PUBLIC_API_KEY}contract/upload/generate_s3_path`, {
+      'Authorization': `Bearer ${session?.tokens?.access || ""}`
+    }, {
+      name: selectedFile?.name
+    });
+    // setSelectedFileUrl(fileResponse.data.key)
+    console.log("==== response ===", fileResponse)
+    if(!fileResponse.data) return;
     const response = await fetch("/api/upload", {
       method: "POST",
       body: formData,
@@ -52,7 +56,10 @@ export default function ImportForm({ onClose }: ImportFormProps) {
         setSelectedFile(null);
         formRef.current?.reset();
         onClose()
-        onOpenModalTags()
+        onSuccess(fileResponse.data.key)
+        // setTimeout(() => {
+        //   onOpenModalTags()
+        // }, 200);
       }
     } else {
       toast({
@@ -83,7 +90,7 @@ export default function ImportForm({ onClose }: ImportFormProps) {
   }, [session?.tokens?.access])
   
   // console.log("session", session?.tokens?.access)
-  return (
+  return <>
     <form style={{ display: "contents" }} ref={formRef} onSubmit={onSubmit}>
       <ModalBody py={{ lg: "37px", base: "25px" }}>
         <FileInput
@@ -108,32 +115,7 @@ export default function ImportForm({ onClose }: ImportFormProps) {
           Submit
         </Button>
       </ModalFooter>
-      <Modal onClose={onCloseModalTags} isOpen={true} isCentered>
-        <ModalOverlay />
-        <ModalContent borderRadius={"16px"} w={"95%"} maxW={"520px"}>
-          <ModalHeader>
-            <Text fontSize={"18"} fontWeight={"700"}>
-              Import Contract
-            </Text>
-            <Text fontSize={"13"} fontWeight={"400"}>
-              Select a file to import to your repository
-            </Text>
-            <Flex gap={'8px'} alignItems={'center'}>
-              <Text fontSize={"14px"} fontWeight={"600"} color={'#287AE0'}>
-                Import
-              </Text>
-              <ArrowIconContractImport />
-              <Text fontSize={"14px"} fontWeight={"600"} color={'#287AE0'}>
-                Tags
-              </Text>
-            </Flex>
-          </ModalHeader>
-          <ModalCloseButton />
-          <Divider orientation="horizontal" />
-          
-          <TagsForm tags={[]} onClose={onCloseModalTags} />
-        </ModalContent>
-      </Modal>
     </form>
-  );
+
+  </>
 }
