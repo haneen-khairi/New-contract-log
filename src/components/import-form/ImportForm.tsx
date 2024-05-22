@@ -36,6 +36,8 @@ export default function ImportForm({ onClose, onSuccess }: ImportFormProps) {
     // setSelectedFileUrl(fileResponse.data.key)
     console.log("==== response ===", fileResponse)
     if(!fileResponse.data) return;
+    // onClose()
+    // onSuccess(fileResponse.data.key)
     const response = await fetch("/api/upload", {
       method: "POST",
       body: formData,
@@ -73,21 +75,21 @@ export default function ImportForm({ onClose, onSuccess }: ImportFormProps) {
 
     setIsSubmitting(false);
   };
-  async function getCustomTags(){
-    const responseTags = await CustomAxios(`get`, `${process.env.NEXT_PUBLIC_API_KEY}contract/upload/tags-options`, {
-      'Authoprization': `Bearer ${session?.tokens?.access}`
-    })
-    console.log("responseTags", responseTags)
-  }
-  useEffect(() => {
-    if(session?.tokens?.access){
-      getCustomTags()
-    }
+  // async function getCustomTags(){
+  //   const responseTags = await CustomAxios(`get`, `${process.env.NEXT_PUBLIC_API_KEY}contract/upload/tags-options`, {
+  //     'Authoprization': `Bearer ${session?.tokens?.access}`
+  //   })
+  //   console.log("responseTags", responseTags)
+  // }
+  // useEffect(() => {
+  //   if(session?.tokens?.access){
+  //     getCustomTags()
+  //   }
 
-    return () => {
+  //   return () => {
       
-    }
-  }, [session?.tokens?.access])
+  //   }
+  // }, [session?.tokens?.access])
   
   // console.log("session", session?.tokens?.access)
   return <>

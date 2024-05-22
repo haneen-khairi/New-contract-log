@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, FormControl, Input, ModalBody, ModalFooter, Text, useToast } from '@chakra-ui/react';
+import { Button, Divider, Flex, FormControl, Grid, Input, ModalBody, ModalFooter, Text, useToast } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
@@ -27,24 +27,28 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
     useEffect(() => {
         async function fetchTagsOptions() {
             try {
-                const response = await axios.get('https://staging.backend.accordcontract.com/contract/upload/tags-options', {
-                    headers: {
-                        'Authorization': `Bearer ${sessionKey}`
-                    }
+                const response = await fetch('https://staging.backend.accordcontract.com/contract/upload/tags-options', {
+                    method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${sessionKey}`,
+                            "Content-Type": "application/json",
+                        },
                 });
-                const tagsOptions = response.data.map((tag: any) => ({
+                const data = await response.json();
+                const tagsOptions = data.map((tag: any) => ({
                     value: tag.id,
                     label: tag.name
                 }));
+                console.log("=== response data ===", response)
                 setOptions(tagsOptions);
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Error fetching tags options:', error);
-                if (error.response) {
-                    console.error('Server responded with status code', error.response.status);
-                } else if (error.request) {
-                    console.error('No response received', error.request);
+                if (error?.response) {
+                    console.error('Server responded with status code', error?.response?.status);
+                } else if (error?.request) {
+                    console.error('No response received', error?.request);
                 } else {
-                    console.error('Error setting up the request', error.message);
+                    console.error('Error setting up the request', error?.message);
                 }
                 toast({
                     description: "Failed to fetch tags. Please try again later.",
@@ -59,8 +63,8 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
 
     function onSubmitTags(data: any) {
         const tagsList = [...selectedTags];
-        let tagsMergedToArrayOfString = tagsList.map((tag: string) => ({
-            name: tag,
+        let tagsMergedToArrayOfString = tagsList.map((tag: any) => ({
+            name: tag?.label,
             uniqueId: Math.random().toString()
         }));
         uploadConfirmation(tagsMergedToArrayOfString);
@@ -161,7 +165,7 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
                             options={options}
                         />
                     </div>
-                    <Flex gap={'12px'}>
+                    <Grid gap={'12px'} templateColumns='repeat(3, 1fr)'  mt={'12px'}>
                         {customTags?.length ? customTags.map(tag => (
                             <Flex borderRadius={'30px'} border={'1px solid #E0E3E6'} gap={'8px'} padding={'6px 12px'} key={tag.uniqueId}>
                                 <Text fontSize={'14px'} fontWeight={'600'}>{tag.name}</Text>
@@ -170,7 +174,7 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
                                 </Button>
                             </Flex>
                         )) : ""}
-                    </Flex>
+                    </Grid>
                 </FormControl>
                 <FormControl flexGrow="1">
                     <label htmlFor="custom_tag">New Custom Tag</label>
@@ -188,7 +192,7 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
                 </FormControl>
             </ModalBody>
             <Divider orientation="horizontal" />
-            <ModalFooter gap={"12px"}>
+            <ModalFooter gap={"12px"} justifyContent={'space-between'}>
                 <Button fontWeight={"400"} variant={"outline"} bgColor={'#FFF4EB'} onClick={handleAddCustomTag}>
                     <Text color="#EE7C21" fontSize={'14px'} fontWeight={'500'}>+ New</Text>
                 </Button>
