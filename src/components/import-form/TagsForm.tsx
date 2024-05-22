@@ -131,7 +131,7 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
                             styles={{
                                 control: (baseStyles, state) => ({
                                     ...baseStyles,
-                                    height: '50px',
+                                    minHeight: '50px',
                                     display: 'flex',
                                     border: "1px solid #D0D5DD",
                                     borderRadius: '8px',

@@ -1,6 +1,6 @@
 import React from 'react'
 import PlusIcon from './PlusIcon'
-import { Flex } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 
 export default function ClausesItem({
     content,
@@ -11,7 +11,7 @@ export default function ClausesItem({
     <p className="clauses__card--paragraph">{content}</p>
     <button onClick={()=> onHandleClick()}  color='#EE7C21'>
         <Flex alignItems={'center'} gap={'8px'}>
-            <PlusIcon /> Add to Contract
+            <PlusIcon /> <Text color='#EE7C21'>Add to Contract</Text>
         </Flex>
         </button>
   </div>

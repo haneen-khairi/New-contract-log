@@ -108,14 +108,16 @@ export default function Page() {
         </div>
         <Grid templateColumns='repeat(2, 1fr)' gap={'24px'} paddingY={"12px"}>
 
-            {tickets?.length > 0 && tickets?.map((ticket: Ticket) => <TicketsCard key={ticket.id} ticket={ticket} />)}
+            {tickets?.length > 0 ? tickets?.map((ticket: Ticket) => <TicketsCard key={ticket.id} ticket={ticket} />) : <Box textAlign={"center"} padding={"12px"} fontSize={"18px"} fontWeight={"500"}>
+                    No Data To Display
+                </Box>}
         </Grid>
         <Card className='ticket__card'>
             <CardBody padding={'24px'}>
 
                 <h5 className='ticket__card--header'>Please Check our FAQs to read the most asked questions</h5>
 
-                <Link className='ticket__card--link' href={'/en/dashboard/help/123'}>Go to FAQs</Link>
+                <Link className='ticket__card--link' target={'_blank'} href={'/en/#faqs'}>Go to FAQs</Link>
             </CardBody>
         </Card>
         <Modal onClose={onCloseModal} isOpen={isCreateModalOpen} isCentered>

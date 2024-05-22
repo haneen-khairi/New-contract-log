@@ -12,13 +12,14 @@ import {
     Spinner,
     Button,
     useToast,
+    Divider,
 } from "@chakra-ui/react";
 import BackButton from "@/components/common/Back";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { createCanvas } from "canvas";
-import "./ContractPreview.css";
+// import "./ContractPreview.css";
 import { ContractStatus } from "@/components/contract-status";
 import { Summary } from "@/components/summary";
 import { DeleteIcon, DownloadIcon, EditIcon } from "@chakra-ui/icons";
@@ -28,6 +29,11 @@ import { Activities } from "@/components/activities";
 import { Relations } from "@/components/relations";
 import { Invoices } from "@/components/invoices";
 import { useRouter } from "next/navigation";
+import CKeditor from "@/components/CKeditor";
+import { CustomAxios } from "@/utils/CustomAxios";
+import ClausesItem from "@/components/clauses/ClausesItem";
+import SaveIcon from "./SaveIcon";
+import SignIcon from "./SignIcon";
 
 // import saveIcon from "/icons/save-icon.svg";
 
@@ -37,7 +43,8 @@ type ContractDocument = {
     name: string;
     status: string;
     summary: string;
-};
+    html_content?: string | null;
+  };
 
 const canvas = createCanvas(200, 200);
 const ctx = canvas.getContext("2d");
@@ -45,20 +52,25 @@ const ctx = canvas.getContext("2d");
 ctx.fillStyle = "green";
 ctx.fillRect(10, 10, 150, 100);
 
-export default function ContractPreview({
+export default function EditorContract({
     contractID,
 }: {
     contractID: string;
 }) {
+    const [editorLoaded, setEditorLoaded] = useState(false);
+    const [data, setData] = useState("");
+    const [clauses, setClauses] = useState([])
     const [document, setDocuments] = useState<ContractDocument>({
         id: "",
         file: "",
         name: "",
         status: "",
+        html_content: null,
         summary: "",
     });
     const isMobile = useBreakpointValue({ sm: true, md: false, lg: false });
     const toast = useToast();
+    const [showClauses, setShowClauses] = useState<boolean>(false)
     const { data: session } = useSession();
     const router = useRouter();
 
@@ -88,8 +100,16 @@ export default function ContractPreview({
             });
         }
     };
-
+    async function getClauses(){
+        const response = await CustomAxios(`get`, `${process.env.NEXT_PUBLIC_API_KEY}contract/edit/clauses`, {
+            'Authorization': `Bearer ${session?.tokens?.access}`
+        })
+        setClauses(response.data)
+        console.log("reposne", response)
+    }
     useEffect(() => {
+        setEditorLoaded(true);
+
         const fetchFile = async () => {
             try {
                 const fileData = await getContractByID(
@@ -102,6 +122,7 @@ export default function ContractPreview({
             }
         };
 
+        getClauses()
         fetchFile();
     }, [contractID, session?.tokens?.access]);
 
@@ -128,6 +149,8 @@ export default function ContractPreview({
                     display: "flex",
                     justifyContent: "space-between",
                     background: "#FFFFFF",
+                    position: 'sticky',
+                    top: '0'
                 }}
             >
                 <Box
@@ -168,11 +191,32 @@ export default function ContractPreview({
                         display: "flex",
                         gap: "1rem",
                         alignItems: "center",
+                        paddingRight: '24px'
                     }}
                 >
                     {isMobile ? (
                         <>
-                            <IconButton
+                        <Button
+                                variant="outline"
+                                onClick={() =>
+                                    setShowClauses(!showClauses)
+                                }
+                            >
+                                Clauses List
+                            </Button>
+                            <Button
+                                // rightIcon={<DeleteIcon />}
+                                // colorScheme="red"
+                                variant="prime"
+                                // onClick={removeContract}
+                            >   
+                                <Flex gap={'8px'}>
+                                    <Text fontSize={'16px'}>Save</Text>
+                                    <SaveIcon />
+                                </Flex>
+
+                            </Button>
+                            {/* <IconButton
                                 aria-label="Delete"
                                 icon={<DeleteIcon />}
                                 colorScheme="red"
@@ -184,48 +228,63 @@ export default function ContractPreview({
                                 aria-label={"Edit Contract"}
                                 colorScheme="red"
                                 variant="outline"
-                                onClick={() => router.push(`/en/${contractID}/editor`)}
+                                onClick={() => router.push(`/en/dashboard/contracts/editor?id=${contractID}`)}
                             />
                             <IconButton
-                                aria-label="Download"
+                                aria-label="Clauses List"
                                 icon={<DownloadIcon />}
                                 variant="outline"
                                 onClick={() =>
                                     downloadFile(document.file, document.name)
                                 }
-                            />
+                            /> */}
                         </>
                     ) : (
                         <>
-                            <Button
-                                rightIcon={<DeleteIcon />}
-                                colorScheme="red"
+                            {/* <Button
+                                // rightIcon={<DeleteIcon />}
+                                // colorScheme="red"
                                 variant="outline"
-                                onClick={removeContract}
+                                // onClick={removeContract}
                             >
-                                Delete
+                                Share
                             </Button>
                             <Button
-                                rightIcon={<EditIcon />}
-                                colorScheme="green"
+                                // rightIcon={<EditIcon />}
+                                // colorScheme="green"
                                 variant="outline"
-                                onClick={() => router.push(`/en/${contractID}/editor`)}
+                                // onClick={() => router.push(`/en/dashboard/contracts/editor?id=${contractID}`)}
                             >
-                                Edit Contract
-                            </Button>
+                                <Flex gap={'8px'}>
+                                    <Text fontSize={'16px'}>Sign</Text>
+                                    <SignIcon />
+                                </Flex>
+                            </Button> */}
                             <Button
                                 variant="outline"
                                 onClick={() =>
-                                    downloadFile(document.file, document.name)
+                                    setShowClauses(!showClauses)
                                 }
                             >
-                                Download
+                                Clauses List
+                            </Button>
+                            <Button
+                                // rightIcon={<DeleteIcon />}
+                                // colorScheme="red"
+                                variant="prime"
+                                // onClick={removeContract}
+                            >   
+                                <Flex gap={'8px'}>
+                                    <Text fontSize={'16px'}>Save</Text>
+                                    <SaveIcon />
+                                </Flex>
+
                             </Button>
                         </>
                     )}
                 </Box>
             </nav>
-            <Box>
+            {/* <Box>
                 <Flex
                     justify={"center"}
                     gap={10}
@@ -283,7 +342,32 @@ export default function ContractPreview({
                         <Invoices contractID={contractID} />
                     </Flex>
                 </Flex>
-            </Box>
+            </Box> */}
+            <div className="ckeditor-container">
+                <CKeditor
+                    name="description"
+                    onChange={(data) => {
+                        setData(data);
+                    }}
+                    value={document.html_content || ""}
+                    editorLoaded={editorLoaded}
+                />
+                {showClauses && <div className="clauses">
+                    <h3 className="clauses__header">Clauses List</h3>
+                    <Divider color={'#000000'} border={'1px solid #000000'} opacity={1} mb={'16px'} />
+                    <Flex direction="column" gap="16px">
+                        {clauses?.length > 0 && clauses.map((clause: any) => <ClausesItem
+                            key={clause.id}
+                            content={clause.content}
+                            id={clause.id}
+                            onHandleClick={() => setDocuments((prevData) => ({
+                                ...prevData,
+                                html_content: prevData.html_content + clause.content
+                            }))} />
+                        )}
+                    </Flex>
+                </div>}
+            </div>
         </Box>
     );
 }

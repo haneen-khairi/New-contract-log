@@ -19,6 +19,7 @@ import {
 // import { useTranslations } from "next-intl";
 import Link from "next/link"; // Import Link from next/link
 import { CgMenuLeftAlt } from "react-icons/cg";
+import { signOut, useSession } from "next-auth/react";
 
 const navItems = [
   { text: "Home", href: "/en/" },
@@ -30,7 +31,7 @@ const navItems = [
 export default function Header() {
   //   const t = useTranslations("Index");
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const {data: session} = useSession()
   const renderNavItem = (item: NavigationItem) => (
     <Link key={item.text} href={item.href}>
       <Text fontWeight={600} py={2} px={4} onClick={onClose}>
@@ -76,7 +77,9 @@ export default function Header() {
           alt="brand-logo"
           display={{ md: "none", base: "flex" }}
         />
-        <Button as={Link} href={"/en/login"} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Sign In</Button>
+        {session?.tokens?.access ? 
+        <Button as={Link} href={"/en/login"} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Sign In</Button>:
+        <Button onClick={()=> signOut()} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Logout</Button>} 
       </Flex>
 
       <Drawer isOpen={isOpen} onClose={onClose} placement="left" size="sm">

@@ -1,5 +1,5 @@
 // import { useTranslations } from "next-intl";
-import { Divider, Flex, Modal, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
+import { Divider, Flex, Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { Key, useState } from "react";
 import { PricingDetails } from "../../components/pricing-details/";
 import { Plan } from ".";
@@ -62,7 +62,7 @@ export default function PricingView({
   // ];
 
   return (
-    <Flex justifyContent={"center"} flexWrap={"wrap"}>
+    <Flex justifyContent={"center"} flexWrap={"wrap"} className="pricing">
       {/* {data.map(
         (
           item: {
@@ -97,6 +97,7 @@ export default function PricingView({
           /> */}
           <Modal onClose={onCloseModal} isOpen={true} isCentered>
             <ModalOverlay />
+            <ModalCloseButton />
             <ModalContent borderRadius={"16px"} w={"95%"} maxW={"520px"}>
                 <ModalHeader>
                     <Text fontSize={"18"} fontWeight={"700"}>

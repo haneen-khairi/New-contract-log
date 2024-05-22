@@ -80,7 +80,7 @@ export default function ContractStatus({
                         listOfStatus.map((stat: StatusData, index: number) => (
                             <option
                                 key={index}
-                                selected={stat.id === docStatus.id}
+                                selected={stat.id === docStatus?.id}
                                 value={stat.id}
                             >
                                 {stat.name}

@@ -35,12 +35,15 @@ import { ImportForm } from "../import-form";
 import AccordionNavigationLink from "../common/ContractsNavigationLink";
 import ArrowIconContractImport from "../import-form/ArrowIconContractImport";
 import TagsForm from "../import-form/TagsForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import NotificationDropdown from "../Notifications/NotificationsContainer";
+import { CustomAxios } from "@/utils/CustomAxios";
 
 export default function Header() {
   const { data: session } = useSession();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedFileUrl, setSelectedFileUrl] = useState<string>("");
+  const [notifications, setNotifications] = useState<INotification[]>([])
 
   const {
     isOpen: isOpenModal,
@@ -52,6 +55,21 @@ export default function Header() {
     onOpen: onOpenModalTags,
     onClose: onCloseModalTags,
   } = useDisclosure();
+
+  async function getNotification(){
+    const notificationsRes = await CustomAxios('get', `${process.env.NEXT_PUBLIC_API_KEY}notification/notifications`, {
+      'Authorization' : `Bearer ${session?.tokens?.access || ""}`
+    });
+    setNotifications(notificationsRes.data)
+    console.log("===== notificationsRes ======", notificationsRes)
+  }
+  useEffect(() => {
+    if(session?.tokens?.access  !== undefined){
+      console.log("auth", session?.tokens?.access)
+      getNotification()
+    }
+    return () => {}
+  }, [session?.tokens?.access])
   return (
     <>
       <Flex
@@ -83,6 +101,7 @@ export default function Header() {
           >
             New Contract
           </Button>
+          <NotificationDropdown notifications={notifications}  />
           <Flex alignItems={"center"}>
             <Avatar
               mr={"16px"}

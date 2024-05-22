@@ -73,7 +73,9 @@ export default function PageDetails() {
             <h5 className="ticket__details--header">{ticket?.subject}</h5>
             <p className="ticket__details--paragraph">{ticket?.description}</p>
             {/* <Link className='ticket__card--link' href={'/en/dashboard/help/123'}>Open Ticket</Link> */}
-            <div className="ticket__details--alert">{ticket?.attachments?.[0]}</div>
+            <div className="ticket__details--alert">
+              <a href={ticket?.attachments?.[0]}>{ticket?.attachments?.[0]}</a>
+            </div>
             <Divider size={'3px'} opacity={1} marginY={'25px'} color={'#000000'} />
             {ticket?.replies !== undefined && ticket?.replies?.length > 0 && (
                 ticket.replies.map((reply) => <div key={reply.id} className="">
@@ -83,18 +85,18 @@ export default function PageDetails() {
                 >
                     {reply.owner}
                 </h5>
-                <p
+                {/* <p
                     className="ticket__details--opened"
                     style={{ marginBottom: "22px" }}
                 >
                     Opened at {isoToTimeAMPM(ticket?.created_at || "")}
-                </p>
-                <h5
+                </p> */}
+                {/* <h5
                     className="ticket__details--header"
                     style={{ marginBottom: "12px" }}
                 >
                     Hello,
-                </h5>
+                </h5> */}
                 <p className="ticket__details--paragraph">{reply?.content}</p>
                 <Divider size={'3px'} opacity={1} marginY={'25px'} color={'#000000'} />
                 </div>)
