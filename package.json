@@ -42,7 +42,7 @@
         "react-dom": "^18",
         "react-hook-form": "^7.51.2",
         "react-icons": "^5.0.1",
-        "react-paginate": "^8.1.0",
+        "react-paginate": "^latest",
         "react-responsive-pagination": "^2.5.0",
         "react-select": "^5.8.0",
         "react-slick": "^0.30.2",
