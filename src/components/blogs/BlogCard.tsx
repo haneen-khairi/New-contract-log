@@ -8,7 +8,7 @@ export default function BlogCard({
   reverse = false
 }: IBlogCardProps) {
   return <div className="blogs__card">
-    <Link href={`en/blogs/details?blogId=${blog?.id}`}>
+    <Link href={`blogs/details?blogId=${blog?.id}`}>
       {(() => {
         if (reverse) {
           return <Grid templateColumns='repeat(2, 1fr)' alignItems={'center'} gap={'24px'}>

@@ -21,7 +21,7 @@ import { createCanvas } from "canvas";
 import "./ContractPreview.css";
 import { ContractStatus } from "@/components/contract-status";
 import { Summary } from "@/components/summary";
-import { DeleteIcon, DownloadIcon } from "@chakra-ui/icons";
+import { DeleteIcon, DownloadIcon, EditIcon } from "@chakra-ui/icons";
 import { Tags } from "@/components/tags";
 import { Approvals } from "@/components/approvals";
 import { Activities } from "@/components/activities";
@@ -179,6 +179,13 @@ export default function ContractPreview({
                                 variant="outline"
                                 onClick={removeContract}
                             />
+                            <IconButton 
+                                icon={<EditIcon />}
+                                aria-label={"Edit Contract"}
+                                colorScheme="red"
+                                variant="outline"
+                                onClick={() => router.push(`/en/dashboard/contracts/editor?id=${contractID}`)} 
+                            />
                             <IconButton
                                 aria-label="Download"
                                 icon={<DownloadIcon />}
@@ -197,6 +204,14 @@ export default function ContractPreview({
                                 onClick={removeContract}
                             >
                                 Delete
+                            </Button>
+                            <Button
+                                rightIcon={<EditIcon />}
+                                colorScheme="green"
+                                variant="outline"
+                                onClick={() => router.push(`/en/dashboard/contracts/editor?id=${contractID}`)}
+                            >
+                                Edit Contract
                             </Button>
                             <Button
                                 variant="outline"
