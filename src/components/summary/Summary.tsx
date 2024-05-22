@@ -124,11 +124,18 @@ export default function Summary({
                 <Heading as="h2" size="sm" fontWeight={500} lineHeight={"18px"}>
                     Summary
                 </Heading>
-                <IconButton
+                {/* <IconButton
                     size="sm"
                     icon={<EditIcon />}
                     aria-label={"Edit summary"}
                     onClick={() => router.push(`/en/dashboard/contracts/editor?id=${contractID}`)}
+                    bg="white"
+                /> */}
+                   <IconButton
+                    size="sm"
+                    icon={<EditIcon />}
+                    aria-label={"Edit summary"}
+                    onClick={onOpenModal}
                     bg="white"
                 />
             </header>
