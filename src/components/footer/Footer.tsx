@@ -18,11 +18,11 @@ import { FaFacebookF, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 const navItems = [
-  { text: "Home", href: "#" },
-  { text: "Pricing", href: "#" },
-  { text: "Blog", href: "#" },
-  { text: "Contact", href: "#" },
-];
+  { text: "Home", href: "/en/" },
+  { text: "Pricing", href: "/en/pricing" },
+  { text: "Blog", href: "/en/blogs" },
+  { text: "Contact Us", href: "/en/contact_us" }
+]
 
 export default function Footer() {
   const t = useTranslations("Footer");

@@ -1,4 +1,4 @@
-import { Card, CardBody, Flex } from '@chakra-ui/react'
+import { Card, CardBody, Flex, Text } from '@chakra-ui/react'
 import React from 'react'
 import LoaderIcon from './loaderIcon'
 import Link from 'next/link'
@@ -18,7 +18,7 @@ export default function TicketsCard({
                     <p className='ticket__card--opened'>Opened at {isoToTimeAMPM(ticket.created_at || "")}</p>
                     <Flex gap={'8px'}>
                         {ticket.status === "Opened" ? <LoaderIcon /> : <CheckIcon /> }
-                        <p className='ticket__card--openicon' color={ticket.status_color}>{ticket.status}</p>
+                        <Text className='ticket__card--openicon' color={`#${ticket.status_color}`}>{ticket.status}</Text>
                     </Flex>
                 </Flex>
             </Flex>

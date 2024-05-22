@@ -72,8 +72,11 @@ export default function Page() {
                                 placeholder="Status"
                                 borderRadius={"8px"}
                             >
-                                <option value={"10"}>
-                                    {"10"}
+                                <option value={"solved"}>
+                                    {"Solved"}
+                                </option>
+                                <option value={"opened"}>
+                                    {"Opened"}
                                 </option>
                                 {/* {statusList.map((stateItem) => {
                 return (
