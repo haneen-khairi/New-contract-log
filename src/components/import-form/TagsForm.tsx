@@ -152,7 +152,7 @@ export default function TagsForm({ onClose, onSuccess, tags, keyAttachment, sess
                             }}
                             onChange={setSelectedTags}
                             placeholder="Tags"
-                            className="text-black"
+                            className="text-black w-full"
                             classNames={{
                                 multiValue: (state: any) =>
                                     !state.isSelected ? 'select__multiple--selected' : '',
