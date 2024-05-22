@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import BlogCard from '@/components/blogs/BlogCard'
 import { Grid } from '@chakra-ui/react'
-import ReactPaginate from 'react-paginate';
-import ResponsivePagination from 'react-responsive-pagination';
+import ResponsivePagination from 'react-responsive-pagination'
 
 import 'react-responsive-pagination/themes/classic.css';
 import { CustomAxios } from '@/utils/CustomAxios';
@@ -56,15 +55,7 @@ export default function Page() {
             <Grid templateColumns='repeat(3, 1fr)' rowGap={'32px'} columnGap={'48px'}>
                 {blogs.length > 0 && blogs.map((blog) => <BlogCard key={blog.id} blog={blog} />)}
             </Grid>
-            {/* <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                // onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                pageCount={6}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
-            /> */}
+            
                 <ResponsivePagination
       total={totalPages}
       current={currentPage}
