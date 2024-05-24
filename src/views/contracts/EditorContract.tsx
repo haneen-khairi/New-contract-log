@@ -73,7 +73,23 @@ export default function EditorContract({
     const [showClauses, setShowClauses] = useState<boolean>(false)
     const { data: session } = useSession();
     const router = useRouter();
-
+    async function updateContract(){
+        const responseFromSavedContract = await CustomAxios(`put`, `${process.env.NEXT_PUBLIC_API_KEY}contract/core/contracts/${contractID}`, {
+            'Authorization': `Bearer ${session?.tokens?.access}`
+        }, {
+            html_content: document.html_content
+        });
+        // console.log("🚀 ~ updateContract ~ responseFromSavedContract:", responseFromSavedContract)
+        if(responseFromSavedContract.message === "Contract updated successfully"){
+            toast({
+                description: "Contract saved successfully",
+                position: "top",
+                status: "success",
+                duration: 3000,
+                isClosable: false,
+            });
+        }
+    }
     const removeContract = async () => {
         const response = await deleteContract(
             contractID,
@@ -116,6 +132,7 @@ export default function EditorContract({
                     contractID,
                     session?.tokens?.access || ""
                 );
+                console.log("🚀 ~ fetchFile ~ fileData:", fileData)
                 setDocuments(fileData);
             } catch (error) {
                 console.error("Error fetching file data:", error);
@@ -272,6 +289,7 @@ export default function EditorContract({
                                 // rightIcon={<DeleteIcon />}
                                 // colorScheme="red"
                                 variant="prime"
+                                onClick={()=> updateContract()}
                                 // onClick={removeContract}
                             >   
                                 <Flex gap={'8px'}>
@@ -284,70 +302,16 @@ export default function EditorContract({
                     )}
                 </Box>
             </nav>
-            {/* <Box>
-                <Flex
-                    justify={"center"}
-                    gap={10}
-                    marginBottom={"2rem"}
-                    flexWrap={{ sm: "wrap", md: "wrap", lg: "nowrap" }}
-                    columnGap={{ sm: "3.5rem", md: "3.5rem" }}
-                    margin={{ lg: "0 40px" }}
-                    paddingBottom={"20px"}
-                >
-                    <Flex
-                        flexDirection={"column"}
-                        gap={"20px"}
-                        marginTop={"20px"}
-                        order={{ sm: "2", md: "2" }}
-                    >
-                        <Summary
-                            summaryData={document.summary}
-                            contractID={contractID}
-                        />
-                        <Tags contractID={contractID} />
-                        <Approvals contractID={contractID} />
-                    </Flex>
-                    <DocViewer
-                        className="my-doc-viewer"
-                        pluginRenderers={DocViewerRenderers}
-                        prefetchMethod="GET"
-                        documents={[
-                            {
-                                uri: document.file,
-                            },
-                        ]}
-                        config={{
-                            header: {
-                                disableHeader: true,
-                                disableFileName: true,
-                                retainURLParams: true,
-                            },
-                            pdfVerticalScrollByDefault: true,
-                            loadingRenderer: {
-                                overrideComponent: MyLoadingRenderer,
-                            },
-                            noRenderer: {
-                                overrideComponent: MyNoRenderer,
-                            },
-                        }}
-                    />
-                    <Flex
-                        flexDirection={"column"}
-                        gap={"20px"}
-                        marginTop={"20px"}
-                        order={{ sm: "3", md: "3" }}
-                    >
-                        <Activities contractID={contractID} />
-                        <Relations contractID={contractID} />
-                        <Invoices contractID={contractID} />
-                    </Flex>
-                </Flex>
-            </Box> */}
+            
             <div className="ckeditor-container">
                 <CKeditor
                     name="description"
                     onChange={(data) => {
-                        setData(data);
+                        // setData(data);
+                        setDocuments((prevData) => ({
+                            ...prevData,
+                            html_content: data
+                        }))
                     }}
                     value={document.html_content || ""}
                     editorLoaded={editorLoaded}
