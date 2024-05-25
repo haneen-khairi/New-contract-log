@@ -13,6 +13,10 @@ import {
     Button,
     useToast,
     Divider,
+    MenuButton,
+    Menu,
+    MenuItem,
+    MenuList,
 } from "@chakra-ui/react";
 import BackButton from "@/components/common/Back";
 import { useEffect, useState } from "react";
@@ -89,6 +93,24 @@ export default function EditorContract({
                 isClosable: false,
             });
         }
+    }
+    async function replaceAi(){
+        const responseReplaceAi = await CustomAxios(`post`, `${process.env.NEXT_PUBLIC_API_KEY}contract/edit/replace_using_ai`, {
+            'Authorization': `Bearer ${session?.tokens?.access}`
+        }, {
+            contract: contractID,
+            text: document.html_content
+        });
+        console.log("🚀 ~ replaceAi ~ responseReplaceAi:", responseReplaceAi)
+        // if(responseFromSavedContract.message === "Contract updated successfully"){
+        //     toast({
+        //         description: "Contract saved successfully",
+        //         position: "top",
+        //         status: "success",
+        //         duration: 3000,
+        //         isClosable: false,
+        //     });
+        // }
     }
     const removeContract = async () => {
         const response = await deleteContract(
@@ -258,6 +280,27 @@ export default function EditorContract({
                         </>
                     ) : (
                         <>
+                        {/* <Menu>
+                            <MenuButton
+                            as={Button}
+                                aria-label='Options'
+                                
+                            >Option menu</MenuButton>
+                            <MenuList>
+                                <MenuItem  command='⌘T'>
+                                New Tab
+                                </MenuItem>
+                                <MenuItem  command='⌘N'>
+                                New Window
+                                </MenuItem>
+                                <MenuItem command='⌘⇧N'>
+                                Open Closed Tab
+                                </MenuItem>
+                                <MenuItem >
+                                Open File...
+                                </MenuItem>
+                            </MenuList>
+                            </Menu> */}
                             {/* <Button
                                 // rightIcon={<DeleteIcon />}
                                 // colorScheme="red"
@@ -277,6 +320,14 @@ export default function EditorContract({
                                     <SignIcon />
                                 </Flex>
                             </Button> */}
+                            <Button
+                                variant="outline"
+                                onClick={() =>
+                                    replaceAi()
+                                }
+                            >
+                                Replace ai 
+                            </Button>
                             <Button
                                 variant="outline"
                                 onClick={() =>
@@ -319,7 +370,7 @@ export default function EditorContract({
                 {showClauses && <div className="clauses">
                     <h3 className="clauses__header">Clauses List</h3>
                     <Divider color={'#000000'} border={'1px solid #000000'} opacity={1} mb={'16px'} />
-                    <Flex direction="column" gap="16px">
+                    <Flex direction="column" gap="16px" padding={'16px'}>
                         {clauses?.length > 0 && clauses.map((clause: any) => <ClausesItem
                             key={clause.id}
                             content={clause.content}
