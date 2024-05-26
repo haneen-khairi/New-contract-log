@@ -19,6 +19,7 @@ import {
 // import { useTranslations } from "next-intl";
 import Link from "next/link"; // Import Link from next/link
 import { CgMenuLeftAlt } from "react-icons/cg";
+import React , {useEffect} from 'react';
 import { signOut, useSession } from "next-auth/react";
 
 const navItems = [
@@ -39,7 +40,11 @@ export default function Header() {
       </Text>
     </Link>
   );
-
+useEffect(()=> {
+ if(!session?.tokens?.access){
+  return;
+ }
+} ,[session?.tokens?.access])
   return (
     <>
       <Flex
