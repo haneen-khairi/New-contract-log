@@ -82,7 +82,7 @@ useEffect(()=> {
           alt="brand-logo"
           display={{ md: "none", base: "flex" }}
         />
-        {session?.tokens?.access ? 
+        {!session?.tokens?.access ? 
         <Button as={Link} href={"/en/login"} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Sign In</Button>:
         <Button onClick={()=> signOut()} p={{sm: "12px", md: "8px 28px"}} variant={"prime"}>Logout</Button>} 
       </Flex>
