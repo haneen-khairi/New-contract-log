@@ -42,8 +42,9 @@ export default function Header() {
   );
 useEffect(()=> {
  if(!session?.tokens?.access){
-  return;
- }
+   return;
+  }
+  // console.log("🚀 ~ useEffect ~ session?.tokens?.access:", session.user.name)
 } ,[session?.tokens?.access])
   return (
     <>
