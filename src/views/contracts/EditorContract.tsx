@@ -63,6 +63,7 @@ export default function EditorContract({
 }) {
     const [editorLoaded, setEditorLoaded] = useState(false);
     const [data, setData] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
     const [clauses, setClauses] = useState([])
     const [document, setDocuments] = useState<ContractDocument>({
         id: "",
@@ -83,6 +84,7 @@ export default function EditorContract({
         }, {
             html_content: document.html_content
         });
+        setIsLoading(true)
         // console.log("🚀 ~ updateContract ~ responseFromSavedContract:", responseFromSavedContract)
         if(responseFromSavedContract.message === "Contract updated successfully"){
             toast({
@@ -92,6 +94,8 @@ export default function EditorContract({
                 duration: 3000,
                 isClosable: false,
             });
+            setIsLoading(false)
+
         }
     }
     async function replaceAi(){
@@ -246,7 +250,9 @@ export default function EditorContract({
                             <Button
                                 // rightIcon={<DeleteIcon />}
                                 // colorScheme="red"
+                                isDisabled={isLoading ? true : false}
                                 variant="prime"
+                                isLoading={isLoading}
                                 // onClick={removeContract}
                             >   
                                 <Flex gap={'8px'}>
