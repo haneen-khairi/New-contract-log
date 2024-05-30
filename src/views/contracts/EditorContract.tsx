@@ -8,15 +8,20 @@ import {
     Flex,
     Image,
     useBreakpointValue,
-    IconButton,
     Spinner,
     Button,
     useToast,
     Divider,
-    MenuButton,
-    Menu,
-    MenuItem,
-    MenuList,
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalOverlay,
+    useDisclosure,
+    ModalBody,
+    FormControl,
+    Input,
+    Textarea,
+    ModalFooter,
 } from "@chakra-ui/react";
 import BackButton from "@/components/common/Back";
 import { useEffect, useState } from "react";
@@ -25,19 +30,13 @@ import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { createCanvas } from "canvas";
 // import "./ContractPreview.css";
 import { ContractStatus } from "@/components/contract-status";
-import { Summary } from "@/components/summary";
-import { DeleteIcon, DownloadIcon, EditIcon } from "@chakra-ui/icons";
-import { Tags } from "@/components/tags";
-import { Approvals } from "@/components/approvals";
-import { Activities } from "@/components/activities";
-import { Relations } from "@/components/relations";
-import { Invoices } from "@/components/invoices";
 import { useRouter } from "next/navigation";
 import CKeditor from "@/components/CKeditor";
 import { CustomAxios } from "@/utils/CustomAxios";
 import ClausesItem from "@/components/clauses/ClausesItem";
 import SaveIcon from "./SaveIcon";
 import SignIcon from "./SignIcon";
+import { useForm } from "react-hook-form";
 
 // import saveIcon from "/icons/save-icon.svg";
 
@@ -61,8 +60,21 @@ export default function EditorContract({
 }: {
     contractID: string;
 }) {
+    const {
+        register,
+        formState: {errors, isValid},
+        handleSubmit,
+        reset
+    } = useForm({
+        mode: "onChange"
+    })
+    
+    const {
+        isOpen: isCreateModalOpen,
+        onOpen: onOpenModal,
+        onClose: onCloseModal,
+    } = useDisclosure();
     const [editorLoaded, setEditorLoaded] = useState(false);
-    const [data, setData] = useState("");
     const [isLoading, setIsLoading] = useState(false)
     const [clauses, setClauses] = useState([])
     const [document, setDocuments] = useState<ContractDocument>({
@@ -98,6 +110,10 @@ export default function EditorContract({
 
         }
     }
+    function onSubmitAi(data: any){
+        setIsLoading(true)
+        addAi(data.question)
+    }
     async function replaceAi(){
         const responseReplaceAi = await CustomAxios(`post`, `${process.env.NEXT_PUBLIC_API_KEY}contract/edit/replace_using_ai`, {
             'Authorization': `Bearer ${session?.tokens?.access}`
@@ -112,15 +128,34 @@ export default function EditorContract({
                 ...prevValue,
                 html_content: newMessage
         }))
-        // if(responseFromSavedContract.message === "Contract updated successfully"){
-        //     toast({
-        //         description: "Contract saved successfully",
-        //         position: "top",
-        //         status: "success",
-        //         duration: 3000,
-        //         isClosable: false,
-        //     });
-        // }
+    }
+    async function addAi(question: string){
+        const responseAddAi = await CustomAxios(`post`, `${process.env.NEXT_PUBLIC_API_KEY}contract/edit/add_using_ai`, {
+            'Authorization': `Bearer ${session?.tokens?.access}`
+        }, {
+            contract: contractID,
+            question
+        });
+        console.log("🚀 ~ addAi ~ responseAddAi:", responseAddAi)
+        const newMessage = JSON.parse(responseAddAi.message).new_text_only
+        if(newMessage){
+            setIsLoading(false)
+            
+            setDocuments((prevValue) =>({
+                    ...prevValue,
+                    html_content: prevValue.html_content + newMessage
+            }))
+            toast({
+                description: "Ai added successfully",
+                position: "top",
+                status: "success",
+                duration: 3000,
+                isClosable: false,
+            });
+            setTimeout(() => {
+                onCloseModal()
+            }, 500);
+        }
     }
     const removeContract = async () => {
         const response = await deleteContract(
@@ -335,6 +370,14 @@ export default function EditorContract({
                             <Button
                                 variant="outline"
                                 onClick={() =>
+                                    onOpenModal()
+                                }
+                            >
+                                Add ai 
+                            </Button>
+                            <Button
+                                variant="outline"
+                                onClick={() =>
                                     replaceAi()
                                 }
                             >
@@ -395,6 +438,49 @@ export default function EditorContract({
                     </Flex>
                 </div>}
             </div>
+            <Modal onClose={onCloseModal} isOpen={isCreateModalOpen} isCentered>
+            <ModalOverlay />
+            <ModalContent borderRadius={"16px"} w={"95%"} maxW={"520px"}>
+                <ModalHeader>
+                    <Text fontSize={"18"} fontWeight={"700"}>
+                        Ask ai
+                    </Text>
+                </ModalHeader>
+                <Divider orientation="horizontal" />
+                <form style={{ display: "contents" }} onSubmit={handleSubmit(onSubmitAi)}>
+            <ModalBody py={{ lg: "37px", base: "25px" }}>
+                    <FormControl flexGrow="1">
+                        <Textarea
+                            {...register("question", { required: true })}
+                            bgColor="white"
+                            borderColor="#c4cfe5"
+                            placeholder="Ticket Subject"
+                            borderRadius={"8px"}
+                        />
+                    </FormControl>
+                    
+            </ModalBody>
+            <Divider orientation="horizontal" />
+
+            <ModalFooter gap={"12px"}>
+                <Button fontWeight={"400"} variant={"outline"} onClick={onCloseModal}>
+                    Cancel
+                </Button>
+                <Button
+                    variant={"prime"}
+                    isDisabled={isValid ? false : true}
+                    isLoading={isLoading}
+                    type="submit"
+                    fontWeight={"400"}
+                    p={"0 16px"}
+                >
+                    Submit
+                </Button>
+            </ModalFooter>
+        </form>
+                {/* <TicketAddForm onClose={onCloseModal} onSuccess={() => getTickets()} /> */}
+            </ModalContent>
+        </Modal>
         </Box>
     );
 }
