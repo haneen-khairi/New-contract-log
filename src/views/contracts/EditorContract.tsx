@@ -454,7 +454,7 @@ export default function EditorContract({
                             {...register("question", { required: true })}
                             bgColor="white"
                             borderColor="#c4cfe5"
-                            placeholder="Ticket Subject"
+                            placeholder="Add ai Question to answer"
                             borderRadius={"8px"}
                         />
                     </FormControl>
@@ -478,7 +478,6 @@ export default function EditorContract({
                 </Button>
             </ModalFooter>
         </form>
-                {/* <TicketAddForm onClose={onCloseModal} onSuccess={() => getTickets()} /> */}
             </ModalContent>
         </Modal>
         </Box>
