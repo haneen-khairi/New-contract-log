@@ -105,7 +105,13 @@ export default function EditorContract({
             contract: contractID,
             text: document.html_content
         });
-        console.log("🚀 ~ replaceAi ~ responseReplaceAi:", responseReplaceAi)
+        console.log("🚀 ~ replaceAi ~ responseReplaceAi:", JSON.parse(responseReplaceAi.message))
+        const newMessage = JSON.parse(responseReplaceAi.message).new_text_only
+        
+        setDocuments((prevValue) =>({
+                ...prevValue,
+                html_content: newMessage
+        }))
         // if(responseFromSavedContract.message === "Contract updated successfully"){
         //     toast({
         //         description: "Contract saved successfully",
