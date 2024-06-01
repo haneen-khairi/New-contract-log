@@ -49,7 +49,7 @@ const Carousel: React.FC<CarouselProps> = ({ children }) => {
       p={"28px 0"}
     >
       <Slider {...settings} ref={sliderRef}>
-        {React.Children.map(children, (child, index) => (
+        {React.Children?.map(children, (child, index) => (
           <Box mb={"34px"} key={index}>
             {child}
           </Box>

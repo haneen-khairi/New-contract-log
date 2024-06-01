@@ -1,6 +1,9 @@
 "use server";
 
-import { CalendarDetailsResponse, ContractSummaryResponse } from "@/types/types";
+import {
+    CalendarDetailsResponse,
+    ContractSummaryResponse,
+} from "@/types/types";
 
 export async function getSummary(
     searchParams: any,
@@ -44,7 +47,7 @@ export async function getSummary(
             }
             return temp;
         }
-        temp.data = await res.json()
+        temp.data = await res.json();
         return temp;
     } catch (error) {
         console.error("Error fetching user permissions:", error);
@@ -56,14 +59,13 @@ export async function getSummary(
                 upcoming: 0,
                 draft: 0,
             },
-        }
+        };
         temp.error = `${error}`;
         return temp;
     }
-    
+
     // Additional login logic here
 }
-
 
 export async function getCalendarData(
     searchParams: any,
@@ -101,16 +103,44 @@ export async function getCalendarData(
             }
             return temp;
         }
-        temp.data = await res.json()
+        temp.data = await res.json();
         return temp;
     } catch (error) {
         console.error("Error fetching user permissions:", error);
         const temp: CalendarDetailsResponse = {
             data: [],
-        }
+        };
         temp.error = `${error}`;
         return temp;
     }
-    
+
     // Additional login logic here
+}
+
+export async function getCalendarInvoiceData(
+    invoiceId: string,
+    accessToken: string
+): Promise<any> {
+    const url = `https://staging.backend.accordcontract.com/contract/core/calender/${invoiceId}`;
+
+    try {
+        const res = await fetch(url, {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        const response = await res.json();
+
+        if (!res.ok) {
+            console.log("error", res.status);
+            return [];
+        }
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching user permissions:", error);
+    }
 }

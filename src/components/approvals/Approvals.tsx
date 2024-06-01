@@ -90,7 +90,7 @@ export default function Approvals({ contractID }: { contractID: string }) {
 
     const clear = () => {
         reset();
-        const approvalsNames = approvals.map(
+        const approvalsNames = approvals?.map(
             (item: { name: any }) => item.name
         );
         setEmails(approvalsNames);
@@ -108,7 +108,7 @@ export default function Approvals({ contractID }: { contractID: string }) {
         if (response?.success_emails?.length > 0) {
             toast({
                 description: `Approvals added successfully: \n${response.success_emails
-                    .map((item: any) => item.email)
+                    ?.map((item: any) => item.email)
                     .join(", ")}`,
                 position: "top",
                 status: "success",
@@ -183,8 +183,13 @@ export default function Approvals({ contractID }: { contractID: string }) {
     };
 
     useEffect(() => {
-        fetchApprovals();
-    }, [fetchApprovals]);
+        if (session?.tokens?.access) {
+            fetchApprovals();
+        }
+    }, [contractID, session?.tokens?.access || ""]);
+    // useEffect(() => {
+    //     fetchApprovals();
+    // }, [fetchApprovals]);
 
     return (
         <Box
@@ -216,9 +221,9 @@ export default function Approvals({ contractID }: { contractID: string }) {
             </header>
             <Divider orientation="horizontal" marginBottom={"1rem"} />
             <Flex>
+            {approvals?.length > 0 ? (
                 <UnorderedList style={{ marginLeft: "0", width: "100%" }}>
-                    {approvals?.length > 0 &&
-                        approvals?.map(
+                    {approvals?.map(
                             (approval: ContractApproval, index: number) => (
                                 <ListItem
                                     key={index}
@@ -281,6 +286,9 @@ export default function Approvals({ contractID }: { contractID: string }) {
                             )
                         )}
                 </UnorderedList>
+            ) : (
+                    <Text>No Data</Text>
+                )}
             </Flex>
             <Modal onClose={onCloseModal} isOpen={isOpenModal} isCentered>
                 <ModalOverlay />

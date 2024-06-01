@@ -17,8 +17,6 @@ export async function verifyInvitation(
 
         const data = await res.json();
 
-        console.log("data", data);
-        
         if (!res.ok) {
             // Log the error and throw to catch block
             console.error("HTTP error", res.status, data);

@@ -50,7 +50,7 @@ export default function BlogsIntro(props: BlogIntroData) {
           justifyContent={"center"}
           wrap={"wrap"}
         >
-          {props.blogInsightsList.map(
+          {props.blogInsightsList?.map(
             (blogInsight, index: Key | null | undefined) => (
               <BlogInsight key={index} {...blogInsight} />
             )

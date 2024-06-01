@@ -1,9 +1,12 @@
 "use server";
 
-
+import { Activity } from "@/components/activities/Activities";
 import { ZodError } from "zod";
 
-export async function getActivities(contractID: string, accessToken: string) {
+export async function getActivities(
+    contractID: string,
+    accessToken: string
+): Promise<Activity[] | undefined> {
     try {
         const url = `https://staging.backend.accordcontract.com/contract/core/activities?contract=${contractID}`;
 
@@ -17,7 +20,7 @@ export async function getActivities(contractID: string, accessToken: string) {
 
         const response = await res.json();
 
-        return response.data;
+        return response.data as Activity[];
     } catch (error: unknown) {
         if (error instanceof ZodError) {
             // Handle validation error specifically

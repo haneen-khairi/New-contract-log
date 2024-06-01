@@ -28,7 +28,13 @@ export const forgetPasswordSchema = z.object({
 
 export const newPasswordSchema = z
     .object({
-        password: z.string().min(4, "Password must be at least 4 characters"),
+        password: z
+            .string()
+            .min(6, "Password must be at least 6 characters")
+            .regex(
+                passwordRegExp,
+                "Password must contain at least one digit, one lowercase letter, one uppercase letter, one special character, and be at least 6 characters long"
+            ),
         confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -141,7 +147,7 @@ export const editAccountSchema = z.object({
         .string()
         .min(1, "Last name is required.")
         .max(50, "First Name must be at most 50 characters"),
-    company_name: z.string().min(1, "Company name is required."),
+        name: z.string().min(1, "Company name is required."),
     phone_number: z
         .string()
         .min(1, "Phone number is required.")

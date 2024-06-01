@@ -12,6 +12,7 @@ import {
     Flex,
 } from "@chakra-ui/react";
 import EditAccount from "./EditAccount";
+import { PlanSection } from "../common/PlanSection";
 
 interface AccountData {
     user: {
@@ -101,7 +102,7 @@ export default function ShowAccount({
                                     fontWeight="500"
                                     lineHeight="27px"
                                 >
-                                    {accountData.user.first_name}
+                                    {accountData?.user?.first_name}
                                 </Text>
                             </Box>
                             <Box>
@@ -119,7 +120,7 @@ export default function ShowAccount({
                                     fontWeight="500"
                                     lineHeight="27px"
                                 >
-                                    {accountData.user.last_name}
+                                    {accountData?.user?.last_name}
                                 </Text>
                             </Box>
                             <Box>
@@ -137,7 +138,7 @@ export default function ShowAccount({
                                     fontWeight="500"
                                     lineHeight="27px"
                                 >
-                                    {accountData.user.phone_number}
+                                    {accountData?.user?.phone_number}
                                 </Text>
                             </Box>
                             <Box>
@@ -155,7 +156,7 @@ export default function ShowAccount({
                                     fontWeight="500"
                                     lineHeight="27px"
                                 >
-                                    {accountData.user.email}
+                                    {accountData?.user?.email}
                                 </Text>
                             </Box>
                             <Box></Box>
@@ -163,60 +164,8 @@ export default function ShowAccount({
                     </Box>
 
                     <Flex marginTop="24px" height={"fit-content"}>
-                        <Flex
-                            bg={"#287AE0"}
-                            borderRadius={"16px"}
-                            width="50%"
-                            justifyContent={"space-between"}
-                            alignItems={"center"}
-                            padding="48px 24px"
-                        >
-                            <Flex flexDirection={"column"}>
-                                <Text
-                                    color={"white"}
-                                    fontWeight={"600"}
-                                    fontSize={"16px"}
-                                    lineHeight={"22px"}
-                                    paddingBottom={"7px"}
-                                >
-                                    Plan
-                                </Text>
-                                <Text
-                                    color={"white"}
-                                    fontWeight={"700"}
-                                    fontSize={"27px"}
-                                    lineHeight={"32px"}
-                                    paddingBottom={"7px"}
-                                >
-                                    {planData.plan}
-                                </Text>
-                                <Link
-                                    href="#"
-                                    color={"white"}
-                                    textDecoration={"underline"}
-                                    fontSize={"14px"}
-                                    fontWeight={"500"}
-                                    lineHeight={"14px"}
-                                >
-                                    Upgrade
-                                </Link>
-                            </Flex>
-                            <Box>
-                                <Image
-                                    src={"/icons/contract_icon.svg"}
-                                    alt="Number of contracts left"
-                                    paddingBottom={"8px"}
-                                />
-                                <Text
-                                    fontSize={"14px"}
-                                    fontWeight={"500"}
-                                    lineHeight={"17px"}
-                                    color={"white"}
-                                >
-                                    {planData.left_contract} Contracts left
-                                </Text>
-                            </Box>
-                        </Flex>
+                        <PlanSection planData={planData} />
+
                         <Flex
                             bg={"white"}
                             borderRadius={"16px"}
@@ -240,7 +189,7 @@ export default function ShowAccount({
                                     name="Dan Abrahmov"
                                     size="xl"
                                     src={
-                                        accountData.company.logo !== null
+                                        !!accountData?.company?.logo
                                             ? accountData.company.logo
                                             : ""
                                     }
@@ -261,7 +210,7 @@ export default function ShowAccount({
                                     fontWeight="500"
                                     line-height="27px"
                                 >
-                                    {accountData.company.name}
+                                    {accountData?.company?.name}
                                 </Text>
                             </Flex>
                         </Flex>

@@ -58,27 +58,35 @@ export async function getPlanData(accessToken: string) {
     }
 }
 
-export async function postAccountData(accessToken: string, data: unknown) {
+export async function postAccountData(accessToken: string, data: any) {
     try {
         const url = `https://staging.backend.accordcontract.com/account/settings`;
 
         const formData = new FormData();
-        const validatedData = editAccountSchema.parse(data);
+        const validatedData: any = editAccountSchema.parse(data);
 
-        formData.append("first_name", validatedData.first_name);
-        formData.append("last_name", validatedData.last_name);
-        formData.append("company_name", validatedData.company_name);
-        formData.append("phone_number", validatedData.phone_number);
-        formData.append("image", validatedData?.image["0"]?.File);
-        formData.append("logo", validatedData?.logo["0"]?.File);
-
-        if (validatedData?.image && validatedData?.image[0] instanceof File) {
-            formData.append("image", validatedData.image[0]);
-        }
-
-        if (validatedData?.logo && validatedData?.logo[0] instanceof File) {
-            formData.append("logo", validatedData.logo[0]);
-        }
+        [
+            "first_name",
+            "last_name",
+            "name",
+            "phone_number",
+            "image",
+            "logo",
+        ].forEach((item) => {
+            if (["image", "logo"].includes(item)) {
+                if (
+                    validatedData &&
+                    validatedData[item] &&
+                    validatedData[item][0] instanceof File
+                ) {
+                    formData.append(item, validatedData[item][0]);
+                }
+            } else {
+                if (validatedData && validatedData[item]) {
+                    formData.append(item, validatedData[item]);
+                }
+            }
+        });
 
         const res = await fetch(url, {
             method: "POST",

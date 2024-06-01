@@ -28,7 +28,7 @@ type Invoice = {
     number: number;
 };
 
-type Activity = {
+export type Activity = {
     id: number;
     description: string;
     action_by: {
@@ -41,7 +41,7 @@ type Activity = {
 };
 
 export default function Activities({ contractID }: { contractID: string }) {
-    const [activities, setActivities] = useState([]);
+    const [activities, setActivities] = useState<Activity[]>([]);
     const { data: session } = useSession();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -51,7 +51,7 @@ export default function Activities({ contractID }: { contractID: string }) {
                 contractID,
                 session?.tokens?.access || ""
             );
-            setActivities(activitiesData);
+            if (activitiesData) setActivities(activitiesData);
         } catch (error) {
             console.error("Error fetching file data:", error);
         }
@@ -97,9 +97,11 @@ export default function Activities({ contractID }: { contractID: string }) {
             </header>
             <Divider orientation="horizontal" marginBottom={"1rem"} />
             <Flex>
-                <UnorderedList style={{ marginLeft: "0", width: "100%" }}>
-                    {activities?.length > 0 &&
-                        activities?.map(
+                {activities?.length === 0 ? (
+                    <Text>No Data</Text>
+                ) : (
+                    <UnorderedList style={{ marginLeft: "0", width: "100%" }}>
+                        {activities?.map(
                             (activity: Activity, index: number) =>
                                 index < 3 && (
                                     <ListItem
@@ -138,7 +140,11 @@ export default function Activities({ contractID }: { contractID: string }) {
                                             <Avatar
                                                 size="xs"
                                                 name={activity?.action_by?.name}
-                                                src="https://bit.ly/broken-link"
+                                                src={
+                                                    activity?.action_by
+                                                        ?.image ||
+                                                    "https://bit.ly/broken-link"
+                                                }
                                             />
                                             <Text
                                                 fontWeight={"500"}
@@ -150,7 +156,8 @@ export default function Activities({ contractID }: { contractID: string }) {
                                     </ListItem>
                                 )
                         )}
-                </UnorderedList>
+                    </UnorderedList>
+                )}
             </Flex>
             <Modal onClose={onClose} isOpen={isOpen} isCentered>
                 <ModalOverlay />
@@ -173,7 +180,7 @@ export default function Activities({ contractID }: { contractID: string }) {
                                             _index: number
                                         ) => (
                                             <ListItem
-                                                key={activity.id}
+                                                key={activity?.id}
                                                 style={{
                                                     display: "flex",
                                                     flexDirection: "column",
@@ -203,7 +210,12 @@ export default function Activities({ contractID }: { contractID: string }) {
                                                                     ?.action_by
                                                                     ?.name
                                                             }
-                                                            src="https://bit.ly/broken-link"
+                                                            src={
+                                                                activity
+                                                                    ?.action_by
+                                                                    ?.image ||
+                                                                "https://bit.ly/broken-link"
+                                                            }
                                                         />
                                                         <Text
                                                             fontWeight={"600"}
@@ -217,12 +229,12 @@ export default function Activities({ contractID }: { contractID: string }) {
                                                         </Text>
                                                     </Box>
                                                     <Text color="#667085">
-                                                        {activity.created_at}
+                                                        {activity?.created_at}
                                                     </Text>
                                                 </Box>
                                                 <Box>
                                                     <Text>
-                                                        {activity.description}
+                                                        {activity?.description}
                                                     </Text>
                                                 </Box>
                                                 <Divider
