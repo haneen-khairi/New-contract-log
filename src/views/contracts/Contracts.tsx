@@ -32,7 +32,7 @@ export default async function Contracts({ searchParams }: any) {
         All Contracts
       </Heading>
       <SearchForm />
-      <ContractTable contracts={contracts.results as any} />
+      <ContractTable contracts={contracts.results} />
       <Paginator totalCount={contracts.count} pageSize={10} />
     </Box>
   );

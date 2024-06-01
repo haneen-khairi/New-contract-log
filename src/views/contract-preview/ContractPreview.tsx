@@ -9,13 +9,9 @@ import {
     Image,
     useBreakpointValue,
     IconButton,
-    MenuButton,
-    MenuItem,
-    MenuList,
     Spinner,
     Button,
     useToast,
-    Menu,
 } from "@chakra-ui/react";
 import BackButton from "@/components/common/Back";
 import { useEffect, useState } from "react";
@@ -25,18 +21,14 @@ import { createCanvas } from "canvas";
 import "./ContractPreview.css";
 import { ContractStatus } from "@/components/contract-status";
 import { Summary } from "@/components/summary";
-import { DeleteIcon, DownloadIcon, EditIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { DeleteIcon, DownloadIcon, EditIcon } from "@chakra-ui/icons";
 import { Tags } from "@/components/tags";
 import { Approvals } from "@/components/approvals";
 import { Activities } from "@/components/activities";
 import { Relations } from "@/components/relations";
 import { Invoices } from "@/components/invoices";
 import { useRouter } from "next/navigation";
-type Permission =
-    | "0001_owner"
-    | "0002_viewer"
-    | "0003_commenter"
-    | "0004_downloader";
+
 // import saveIcon from "/icons/save-icon.svg";
 
 type ContractDocument = {
@@ -45,7 +37,6 @@ type ContractDocument = {
     name: string;
     status: string;
     summary: string;
-    permissions: Permission[];
 };
 
 const canvas = createCanvas(200, 200);
@@ -65,28 +56,12 @@ export default function ContractPreview({
         name: "",
         status: "",
         summary: "",
-        permissions: [],
     });
     const isMobile = useBreakpointValue({ sm: true, md: false, lg: false });
     const toast = useToast();
     const { data: session } = useSession();
     const router = useRouter();
 
-    const permittedRoles: {
-        download: Permission[];
-        edit: Permission[];
-        delete: Permission[];
-        create: Permission[];
-    } = {
-        download: ["0001_owner", "0004_downloader"],
-        edit: ["0001_owner"],
-        delete: ["0001_owner"],
-        create: ["0001_owner"],
-    };
-
-    const isDownloadable = permittedRoles.download.every(
-        (role) => !document?.permissions?.includes(role)
-    );
     const removeContract = async () => {
         const response = await deleteContract(
             contractID,
@@ -117,7 +92,7 @@ export default function ContractPreview({
     useEffect(() => {
         const fetchFile = async () => {
             try {
-                const fileData: any = await getContractByID(
+                const fileData = await getContractByID(
                     contractID,
                     session?.tokens?.access || ""
                 );
@@ -166,7 +141,7 @@ export default function ContractPreview({
                     padding={{ sm: "0", md: "20px 10px", lg: "20px 40px" }}
                 >
                     <Image
-                         width={{ lg: "42px", md: "42px", sm: "16px" }}
+                        width={{ lg: "32px", md: "32px", sm: "16px" }}
                         display={{ base: "none", md: "inline-block" }}
                         src={"/images/short-logo.svg"}
                         alt={"brand logo"}
@@ -195,33 +170,31 @@ export default function ContractPreview({
                         alignItems: "center",
                     }}
                 >
-                     {isMobile ? (
-                        <Menu>
-                            <MenuButton
-                                as={IconButton}
-                                icon={<ChevronDownIcon />}
+                    {isMobile ? (
+                        <>
+                            <IconButton
+                                aria-label="Delete"
+                                icon={<DeleteIcon />}
+                                colorScheme="red"
                                 variant="outline"
+                                onClick={removeContract}
                             />
-                            <MenuList>
-                                <MenuItem
-                                    icon={<DownloadIcon />}
-                                    onClick={() =>
-                                        downloadFile(
-                                            document.file,
-                                            document.name
-                                        )
-                                    }
-                                >
-                                    Download
-                                </MenuItem>
-                                <MenuItem
-                                    icon={<DeleteIcon />}
-                                    onClick={removeContract}
-                                >
-                                    Delete
-                                </MenuItem>
-                            </MenuList>
-                        </Menu>
+                            <IconButton
+                                icon={<EditIcon />}
+                                aria-label={"Edit Contract"}
+                                colorScheme="red"
+                                variant="outline"
+                                onClick={() => router.push(`/en/${contractID}/editor`)}
+                            />
+                            <IconButton
+                                aria-label="Download"
+                                icon={<DownloadIcon />}
+                                variant="outline"
+                                onClick={() =>
+                                    downloadFile(document.file, document.name)
+                                }
+                            />
+                        </>
                     ) : (
                         <>
                             <Button
@@ -231,6 +204,14 @@ export default function ContractPreview({
                                 onClick={removeContract}
                             >
                                 Delete
+                            </Button>
+                            <Button
+                                rightIcon={<EditIcon />}
+                                colorScheme="green"
+                                variant="outline"
+                                onClick={() => router.push(`/en/${contractID}/editor`)}
+                            >
+                                Edit Contract
                             </Button>
                             <Button
                                 variant="outline"
@@ -250,7 +231,7 @@ export default function ContractPreview({
                     gap={10}
                     marginBottom={"2rem"}
                     flexWrap={{ sm: "wrap", md: "wrap", lg: "nowrap" }}
-                    columnGap={{ sm: "3.5rem", md: "2rem" }}
+                    columnGap={{ sm: "3.5rem", md: "3.5rem" }}
                     margin={{ lg: "0 40px" }}
                     paddingBottom={"20px"}
                 >

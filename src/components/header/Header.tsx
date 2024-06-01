@@ -42,8 +42,9 @@ export default function Header() {
   );
 useEffect(()=> {
  if(!session?.tokens?.access){
-  return;
- }
+   return;
+  }
+  // console.log("🚀 ~ useEffect ~ session?.tokens?.access:", session.user.name)
 } ,[session?.tokens?.access])
   return (
     <>
@@ -64,7 +65,7 @@ useEffect(()=> {
         >
           <Box mr={{ lg: "56px", md: "36px" }}>
             <Image
-                    width={{ lg: "45px", md: "40px", sm: "30px" }}
+              width={{ lg: "120px", md: "110px", sm: "100px" }}
               src={"/images/base-logo.svg"}
               alt="brand-logo"
             />
@@ -77,7 +78,7 @@ useEffect(()=> {
           </Flex>
         </Flex>
         <Image
-      width={{ lg: "45px", md: "40px", sm: "40px" }}
+          width={{ lg: "120px", md: "110px", sm: "100px" }}
           src={"/images/base-logo.svg"}
           alt="brand-logo"
           display={{ md: "none", base: "flex" }}
@@ -94,11 +95,7 @@ useEffect(()=> {
             <Flex justifyContent="space-between" alignItems="center">
               <Box mr={54}>
                 <Image
-              width={{
-                lg: "45px",
-                md: "40px",
-                sm: "40px",
-            }}
+                  width={{ lg: "120px", md: "110px", sm: "100px" }}
                   src={"/images/base-logo.svg"}
                   alt="brand-logo"
                 />
