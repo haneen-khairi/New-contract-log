@@ -75,7 +75,7 @@ export default function UpdateRelation({
                             <UnorderedList
                                 style={{ marginLeft: "0", width: "100%" }}
                             >
-                                {relations.length > 0 &&
+                                {relations?.length > 0 &&
                                     relations.map(
                                         (
                                             relation: Relation,

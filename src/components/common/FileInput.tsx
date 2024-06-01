@@ -38,23 +38,13 @@ function FileInput ({selectedFile, setSelectedFile , isTicket = false}: FileInpu
 
     const fileType = file.type;
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    if(isTicket){
-        if (allowedTypes.includes(fileType) || file.type.includes('image')) {
-        //   setMessage(`File ${file.name} selected!`);
-        setSelectedFile(file);
-      } else {
-        setMessage("Please select a PDF, DOC , DOCX or image file.");
-        setSelectedFile(null);
-      }
-    }else{
-      if (allowedTypes.includes(fileType) ) {
-        //   setMessage(`File ${file.name} selected!`);
-        setSelectedFile(file);
-      } else {
-        setMessage("Please select a PDF, DOC or DOCX file.");
-        setSelectedFile(null);
-      }
 
+    if (allowedTypes.includes(fileType)) {
+      //   setMessage(`File ${file.name} selected!`);
+      setSelectedFile(file);
+    } else {
+      setMessage("Please select a PDF, DOC or DOCX file.");
+      setSelectedFile(null);
     }
   };
 

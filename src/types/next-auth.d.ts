@@ -11,6 +11,7 @@ declare module "next-auth" {
             id: string;
             job_title: string;
             name: string;
+            image: string;
             phone_number: string;
         };
     }

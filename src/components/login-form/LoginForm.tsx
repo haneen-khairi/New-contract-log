@@ -14,6 +14,8 @@ import {
     Heading,
     Flex,
     Text,
+    InputRightElement,
+    Image,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +29,7 @@ import { login } from "@/actions/login";
 
 export default function LoginForm() {
     const [showOTP, setShowOTP] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const toast = useToast();
     const {
@@ -45,6 +48,8 @@ export default function LoginForm() {
         ref: emailRef,
     } = register("email");
     const [isEmailFocused, setIsEmailFocused] = useState(false);
+
+    const handleClick = () => setShowPassword(!showPassword);
 
     const {
         onChange: passwordOnChange,
@@ -150,7 +155,7 @@ export default function LoginForm() {
                                     </FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.password}>
-                                    <InputGroup>
+                                    {/* <InputGroup>
                                         <InputLeftElement
                                             display={"contents"}
                                             pointerEvents="none"
@@ -194,7 +199,39 @@ export default function LoginForm() {
                                             type="password"
                                             placeholder="*******"
                                             h={"50px"}
+                                        /> */}
+                                    {/* </InputGroup> */}
+                                    <InputGroup size="md">
+                                        <Input
+                                            {...register("password")}
+                                            pr="4.5rem"
+                                            type={
+                                                showPassword
+                                                    ? "text"
+                                                    : "password"
+                                            }
+                                            placeholder="Enter password"
                                         />
+                                        <InputRightElement width="4.5rem">
+                                            <Button
+                                                h="1.75rem"
+                                                size="sm"
+                                                onClick={handleClick}
+                                                bg={"transparent"}
+                                            >
+                                                {showPassword ? (
+                                                    <Image
+                                                        src="/icons/hide.svg"
+                                                        alt="hide"
+                                                    />
+                                                ) : (
+                                                    <Image
+                                                        src="/icons/show.svg"
+                                                        alt="show"
+                                                    />
+                                                )}
+                                            </Button>
+                                        </InputRightElement>
                                     </InputGroup>
                                     <FormErrorMessage>
                                         {errors.password &&

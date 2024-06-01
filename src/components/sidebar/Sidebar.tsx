@@ -81,6 +81,7 @@ export default function Sidebar() {
                         aria-label="Collapse sidebar"
                         variant="ghost"
                         size="md"
+                        marginLeft="auto"
                         minW={isCollapsed ? "unset" : "40px"}
                     />
                 </Flex>
@@ -135,27 +136,25 @@ export default function Sidebar() {
                         link={"billing"}
                     />
                 </VStack>
-                {!isCollapsed ? <>
-                    <div className="progress mb-8px">
-                        <Flex marginBottom={'8px'} justifyContent={'space-between'}>
-                            <p>Free trial</p>
-                            <h3>{subscriptionInfo?.number_of_uploaded} Contracts Left</h3>
-                        </Flex>
-                        <Progress colorScheme={'orange'} borderRadius={'md'} size='sm' value={((subscriptionInfo?.number_of_uploaded || 0) / (subscriptionInfo?.upload_limit || 1)) * 100} />
-                    </div>
-                    <Card maxW='sm' className="card">
-                        <CardBody className="card__premium">
-                            <Image
-                                src='/icons/premiumIcon.svg'
-                                alt='Green double couch with wooden legs'
-                                borderRadius='lg'
-                                marginBottom={'12px'}
-                            />
-                            <p>Upgrade to <span>Pro</span> for more resources</p>
-                            <Button as={Link} href={'/en/pricing'}   marginTop={'12px'} backgroundColor={'white'} >Upgrade </Button>
-                        </CardBody>
-                    </Card>
-                </>: ""}
+                <div className="progress mb-8px">
+                    <Flex marginBottom={'8px'} justifyContent={'space-between'}>
+                        <p>Free trial</p>
+                        <h3>{subscriptionInfo?.number_of_uploaded} Contracts Left</h3>
+                    </Flex>
+                    <Progress colorScheme={'orange'} borderRadius={'md'} size='sm' value={((subscriptionInfo?.number_of_uploaded || 0) / (subscriptionInfo?.upload_limit || 1)) * 100} />
+                </div>
+                <Card maxW='sm' className="card">
+                    <CardBody className="card__premium">
+                        <Image
+                            src='/icons/premiumIcon.svg'
+                            alt='Green double couch with wooden legs'
+                            borderRadius='lg'
+                            marginBottom={'12px'}
+                        />
+                        <p>Upgrade to <span>Pro</span> for more resources</p>
+                        <Button as={Link} href={'/en/pricing'}   marginTop={'12px'} backgroundColor={'white'} >Upgrade </Button>
+                    </CardBody>
+                </Card>
             </Flex>
         </MotionBox>
     );

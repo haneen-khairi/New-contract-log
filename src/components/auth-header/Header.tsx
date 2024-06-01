@@ -7,6 +7,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
   
 } from "@chakra-ui/react";
 import { useTranslations } from "next-intl";

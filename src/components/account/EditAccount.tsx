@@ -58,12 +58,22 @@ export default function EditAccount({ data }: { data: AccountData }) {
     });
 
     const onSubmit = async (data: z.infer<typeof editAccountSchema>) => {
+        const obj: any = structuredClone(data);
+
+        if (data?.image?.length > 0) {
+            obj.image = data?.image;
+        } else delete obj["image"];
+
+        if (data?.logo?.length > 0) {
+            obj.logo = data?.logo;
+        } else delete obj["logo"];
+
         const response = await postAccountData(
             session?.tokens?.access || "",
-            data
+            obj
         );
 
-        if (response.user) {
+        if (response?.user) {
             toast({
                 description: "Account updated successfully",
                 position: "top",
@@ -225,7 +235,7 @@ export default function EditAccount({ data }: { data: AccountData }) {
                                     size="2xl"
                                     src={
                                         accountData?.company?.logo !== null
-                                            ? accountData?.company?.logo
+                                            ? accountData.company.logo
                                             : ""
                                     }
                                 />
@@ -309,7 +319,7 @@ export default function EditAccount({ data }: { data: AccountData }) {
                                             <InputGroup>
                                                 <Input
                                                     {...register(
-                                                        "company_name"
+                                                        "name"
                                                     )}
                                                     disabled={isSubmitting}
                                                     type="text"
@@ -321,8 +331,8 @@ export default function EditAccount({ data }: { data: AccountData }) {
                                             </InputGroup>
 
                                             <FormErrorMessage>
-                                                {errors.company_name &&
-                                                    `${errors.company_name.message}`}
+                                                {errors.name &&
+                                                    `${errors.name.message}`}
                                             </FormErrorMessage>
                                         </FormControl>
                                         <FormControl

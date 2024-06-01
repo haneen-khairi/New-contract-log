@@ -78,18 +78,13 @@ export async function getContractsEndSoon(accessToken: string) {
     return response;
 }
 
-export async function getInvoices(
-    searchParams: any,
-    accessToken: string
-){
+export async function getInvoices(searchParams: any, accessToken: string) {
     const params = new URLSearchParams(searchParams);
 
     const url =
         "https://staging.backend.accordcontract.com/contract/invoice/invoices";
 
     const completeUrl = `${url}?${params.toString()}`;
-
-    console.log("URL", completeUrl);
 
     const res = await fetch(completeUrl, {
         method: "GET",
@@ -99,7 +94,6 @@ export async function getInvoices(
             "Content-Type": "application/json",
         },
     });
-
 
     if (res.status !== 200) {
         console.log("error", res.status);
@@ -183,7 +177,6 @@ export async function updateInvoiceByID(
         return temp;
     }
     const holder = await res.json();
-    console.log(holder);
     temp.data = holder;
 
     return temp;
@@ -221,7 +214,6 @@ export async function updateInvoiceItems(
     }
 
     const holder = await res.json();
-    console.log(holder);
     temp.data = holder;
 
     return temp;

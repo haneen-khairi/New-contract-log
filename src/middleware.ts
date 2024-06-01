@@ -3,7 +3,7 @@ import { withAuth } from 'next-auth/middleware';
 import { NextRequest } from 'next/server';
 
 const locales = ['en', 'ar'];
-const publicPages = ['/', '/pricing', '/blogs', '/contact_us', '/login', "/register", "/forget-password", '/[id]/invoice'];
+const publicPages = ['/', '/pricing', '/blogs', '/contact_us', '/login', "/register", "/forget-password"];
 
 const intlMiddleware = createMiddleware({
     locales,
@@ -31,7 +31,7 @@ export default function middleware(req: NextRequest) {
     );
     const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
 
-    if (isPublicPage || req.nextUrl.pathname.includes("invoice")) {
+    if (isPublicPage) {
         return intlMiddleware(req);
     } else {
         return (authMiddleware as any)(req);

@@ -27,6 +27,11 @@ import { useRouter } from "next/navigation";
 export default function ForgetPassword() {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+  const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const handleConfirmedClick = () =>
+        setShowConfirmPassword(!showConfirmPassword);
   const { data: session } = useSession();
   const toast = useToast();
   const router = useRouter();
@@ -105,7 +110,9 @@ export default function ForgetPassword() {
               </InputRightElement>
             </InputGroup>
             <FormErrorMessage>
-              {errors.password && `${errors.password.message}`}
+            {errors.password && (
+                                <p className="text-red-500">{`${errors.password.message}`}</p>
+                            )}
             </FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.confirmPassword}>
@@ -113,7 +120,7 @@ export default function ForgetPassword() {
               <Input
                 {...register("confirmPassword")}
                 pr="4.5rem"
-                type={show ? "text" : "password"}
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="Enter password"
                 disabled={isSubmitting}
               />
@@ -121,21 +128,28 @@ export default function ForgetPassword() {
                 <Button
                   h="1.75rem"
                   size="sm"
-                  onClick={handleClick}
+                  onClick={handleConfirmedClick}
                   bg={"transparent"}
                 >
-                  {show ? (
-                    <Image src="/icons/hide.svg" alt="hide" />
-                  ) : (
-                    <Image src="/icons/show.svg" alt="show" />
-                  )}
+              {showConfirmPassword ? (
+                                        <Image
+                                            src="/icons/hide.svg"
+                                            alt="hide"
+                                        />
+                                    ) : (
+                                        <Image
+                                            src="/icons/show.svg"
+                                            alt="show"
+                                        />
+                                    )}
                 </Button>
               </InputRightElement>
             </InputGroup>
 
             <FormErrorMessage>
-              {errors.confirmPassword && `${errors.confirmPassword.message}`}
-            </FormErrorMessage>
+            {errors.confirmPassword && (
+                                <p className="text-red-500">{`${errors.confirmPassword.message}`}</p>
+                            )}            </FormErrorMessage>
           </FormControl>
           <Button
             type="submit"
