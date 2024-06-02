@@ -32,12 +32,6 @@ export async function getImportLink(accessToken: string, file: File | null): Pro
         const importLinkRes: LinkResponse = await res1.json();
         const uploadUrl = importLinkRes.data.url;
 
-        // const formData = new FormData();
-        // formData.append("file", file);
-
-        console.log(importLinkRes);
-        console.log("file.type", file.type);
-
         const res2 = await fetch(
             uploadUrl,
             {

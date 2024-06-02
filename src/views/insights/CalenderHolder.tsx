@@ -2,7 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/types/nextauth.config";
 import { Redirect } from "@/components/redirect";
-import Calendar from "@/components/common/Calendar";
+import Calendar from "@/components/calender/Calendar";
 import { getCalendarData } from "@/actions/insights";
 
 export default async function CalenderHolder({ searchParams }: any) {
@@ -19,7 +19,7 @@ export default async function CalenderHolder({ searchParams }: any) {
 
   return (
     <Box p={{lg: "24px", base: "16px"}}>
-      <Calendar contracts={contracts.data} />
+      <Calendar contracts={contracts?.data} />
     </Box>
   );
 }

@@ -43,8 +43,7 @@ export default function Signup({ token }: { token: string }) {
   const onSubmit = async (data: z.infer<typeof inviteSignupSchema>) => {
     
     const response = await joinByInvite(token, data);
-    console.log(response);
-    
+
     if (response.ok) {
         toast({
             description: "User registered successfully.",
@@ -89,7 +88,7 @@ export default function Signup({ token }: { token: string }) {
       <Heading as={"h2"} mb={"12px"} alignItems={"flex-start"}>
         Join CaDas by invitation
       </Heading>
-      <Text>Fill the required fields to create your new account at CaDas!</Text>
+      <Text>Fill the required fields to create your new account at Accord!</Text>
       <Box w={"100%"} mt={"32px"}>
         <form style={{ display: "contents" }} onSubmit={handleSubmit(onSubmit)}>
           <Stack gap={"16px"}>
