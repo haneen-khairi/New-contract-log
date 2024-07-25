@@ -50,6 +50,7 @@ function NotificationDropdown({
                                 notificationMsg={notification.content}
                                 notificationDate={notification.time_since}
                                 notificationTitle={notification.title}
+                                notificationAction={{action: notification?.action , id: notification?.data?.contract_id}}
                             />
                             </Button>)}
 

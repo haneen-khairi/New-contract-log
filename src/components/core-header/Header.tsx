@@ -62,6 +62,7 @@ export default function Header() {
     const notificationsRes = await CustomAxios('get', `${process.env.NEXT_PUBLIC_API_KEY}notification/notifications`, {
       'Authorization' : `Bearer ${session?.tokens?.access || ""}`
     });
+      // console.log("🚀 ~ getNotification ~ notificationsRes:", notificationsRes)
     setNotifications(notificationsRes.data)
     console.log("===== notificationsRes ======", notificationsRes)
   }
@@ -72,6 +73,7 @@ export default function Header() {
     }
     return () => {}
   }, [session?.tokens?.access])
+
   return (
     <>
       <Flex
